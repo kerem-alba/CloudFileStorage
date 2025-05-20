@@ -1,0 +1,6 @@
+@CloudFileStorage.AuthApi_HostAddress = http://localhost:5113
+
+GET {{CloudFileStorage.AuthApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
