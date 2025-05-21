@@ -2,7 +2,7 @@
 using CloudFileStorage.AuthApi.Common;
 using CloudFileStorage.AuthApi.Constants;
 using CloudFileStorage.AuthApi.DTOs;
-using CloudFileStorage.AuthApi.Helpers;
+using CloudFileStorage.AuthApi.Enums;
 using CloudFileStorage.AuthApi.Models;
 using CloudFileStorage.AuthApi.Repositories;
 
@@ -11,22 +11,22 @@ namespace CloudFileStorage.AuthApi.Services
     public class AuthService : IAuthService
     {
         private readonly IUserRepository _userRepository;
-        private readonly IConfiguration _config;
+        private readonly ITokenService _tokenService;
         private readonly IMapper _mapper;
 
-        public AuthService(IUserRepository userRepository, IConfiguration config, IMapper mapper)
+        public AuthService(IUserRepository userRepository, ITokenService tokenService, IMapper mapper)
         {
             _userRepository = userRepository;
-            _config = config;
+            _tokenService = tokenService;
             _mapper = mapper;
         }
 
-        public async Task<ServiceResponse<string>> RegisterAsync(RegisterUserDto dto)
+        public async Task<ServiceResponse<AuthResponseDto>> RegisterAsync(RegisterUserDto dto)
         {
             var existingUser = await _userRepository.GetByEmailAsync(dto.Email);
             if (existingUser != null)
             {
-                return new ServiceResponse<string>
+                return new ServiceResponse<AuthResponseDto>
                 {
                     Success = false,
                     Message = ResponseMessages.UserAlreadyExists,
@@ -35,13 +35,25 @@ namespace CloudFileStorage.AuthApi.Services
             }
 
             var user = _mapper.Map<User>(dto);
-            await _userRepository.AddAsync(user);
-            await _userRepository.SaveAsync();
+            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
+            user.Role = UserRole.User;
 
-            return new ServiceResponse<string>
+            var (accessToken, refreshToken, refreshExpire) = _tokenService.GenerateTokens(user);
+
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenExpireDate = refreshExpire;
+
+            await _userRepository.AddAsync(user);
+
+            return new ServiceResponse<AuthResponseDto>
             {
-                Message = ResponseMessages.UserCreated,
-                StatusCode = 200
+                Data = new AuthResponseDto
+                {
+                    AccessToken = accessToken,
+                    RefreshToken = refreshToken
+                },
+                Message = ResponseMessages.RegisterSuccess,
+                StatusCode = 201
             };
         }
 
@@ -58,12 +70,54 @@ namespace CloudFileStorage.AuthApi.Services
                 };
             }
 
-            var token = JwtHelper.GenerateToken(user, _config);
+            var (accessToken, refreshToken, refreshExpire) = _tokenService.GenerateTokens(user);
+
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenExpireDate = refreshExpire;
+
+            await _userRepository.UpdateAsync(user);
 
             return new ServiceResponse<AuthResponseDto>
             {
-                Data = new AuthResponseDto { Token = token },
+                Data = new AuthResponseDto
+                {
+                    AccessToken = accessToken,
+                    RefreshToken = refreshToken
+                },
                 Message = ResponseMessages.LoginSuccess,
+                StatusCode = 200
+            };
+        }
+
+        public async Task<ServiceResponse<AuthResponseDto>> RefreshTokenAsync(string refreshToken)
+        {
+            var user = await _userRepository.GetByRefreshTokenAsync(refreshToken);
+
+            if (user == null || user.RefreshTokenExpireDate == null || user.RefreshTokenExpireDate < DateTime.Now)
+            {
+                return new ServiceResponse<AuthResponseDto>
+                {
+                    Success = false,
+                    Message = ResponseMessages.RefreshTokenInvalid,
+                    StatusCode = 401
+                };
+            }
+
+            var (newAccessToken, newRefreshToken, newRefreshExpire) = _tokenService.GenerateTokens(user);
+
+            user.RefreshToken = newRefreshToken;
+            user.RefreshTokenExpireDate = newRefreshExpire;
+
+            await _userRepository.UpdateAsync(user);
+
+            return new ServiceResponse<AuthResponseDto>
+            {
+                Data = new AuthResponseDto
+                {
+                    AccessToken = newAccessToken,
+                    RefreshToken = newRefreshToken
+                },
+                Message = ResponseMessages.RefreshTokenSuccess,
                 StatusCode = 200
             };
         }

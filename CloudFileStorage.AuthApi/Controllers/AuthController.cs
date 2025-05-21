@@ -29,7 +29,15 @@ namespace CloudFileStorage.AuthApi.Controllers
         {
             var response = await _authService.LoginAsync(dto);
             return this.HandleResponse(response);
-
         }
+
+        [HttpPost("refresh")]
+        public async Task<IActionResult> Refresh([FromBody] string refreshToken)
+        {
+            var response = await _authService.RefreshTokenAsync(refreshToken);
+            return this.HandleResponse(response);
+        }
+
+
     }
 }
