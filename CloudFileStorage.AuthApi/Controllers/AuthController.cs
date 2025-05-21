@@ -1,8 +1,8 @@
-﻿using CloudFileStorage.AuthApi.Constants;
-using CloudFileStorage.AuthApi.DTOs;
-using CloudFileStorage.AuthApi.Extensions;
-using CloudFileStorage.AuthApi.Services;
+﻿using CloudFileStorage.Common.Extensions;
+using CloudFileStorage.AuthApi.Models.DTOs;
+using CloudFileStorage.AuthApi.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+
 
 namespace CloudFileStorage.AuthApi.Controllers
 {
@@ -32,9 +32,9 @@ namespace CloudFileStorage.AuthApi.Controllers
         }
 
         [HttpPost("refresh")]
-        public async Task<IActionResult> Refresh([FromBody] string refreshToken)
+        public async Task<IActionResult> Refresh([FromBody] RefreshTokenDto request)
         {
-            var response = await _authService.RefreshTokenAsync(refreshToken);
+            var response = await _authService.RefreshTokenAsync(request.RefreshToken);
             return this.HandleResponse(response);
         }
 

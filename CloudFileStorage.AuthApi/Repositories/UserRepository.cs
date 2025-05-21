@@ -1,5 +1,5 @@
 ﻿using CloudFileStorage.AuthApi.Data;
-using CloudFileStorage.AuthApi.Models;
+using CloudFileStorage.AuthApi.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace CloudFileStorage.AuthApi.Repositories
@@ -12,7 +12,6 @@ namespace CloudFileStorage.AuthApi.Repositories
         {
             _context = context;
         }
-
         public async Task<User?> GetByEmailAsync(string email)
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);

@@ -1,4 +1,4 @@
-﻿using CloudFileStorage.AuthApi.Models;
+﻿using CloudFileStorage.AuthApi.Models.Entities;
 
 namespace CloudFileStorage.AuthApi.Repositories
 {

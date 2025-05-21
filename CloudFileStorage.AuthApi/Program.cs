@@ -5,6 +5,7 @@ using CloudFileStorage.AuthApi.Validators;
 using FluentValidation.AspNetCore;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using CloudFileStorage.AuthApi.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 

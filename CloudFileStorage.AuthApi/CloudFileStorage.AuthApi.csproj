@@ -24,4 +24,8 @@
     <Folder Include="Database\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CloudFileStorage.Common\CloudFileStorage.Common.csproj" />
+  </ItemGroup>
+
 </Project>
