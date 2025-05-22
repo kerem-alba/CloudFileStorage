@@ -1,27 +1,28 @@
 ﻿using AutoMapper;
-using CloudFileStorage.AuthApi.Common;
-using CloudFileStorage.AuthApi.Constants;
-using CloudFileStorage.AuthApi.DTOs;
-using CloudFileStorage.AuthApi.Enums;
-using CloudFileStorage.AuthApi.Models;
+using CloudFileStorage.AuthApi.Common.Enums;
+using CloudFileStorage.AuthApi.Models.DTOs;
+using CloudFileStorage.AuthApi.Models.Entities;
 using CloudFileStorage.AuthApi.Repositories;
+using CloudFileStorage.AuthApi.Services.Interfaces;
+using CloudFileStorage.Common.Constants;
+using CloudFileStorage.Common.Models;
 
-namespace CloudFileStorage.AuthApi.Services
+public class AuthService : IAuthService
 {
-    public class AuthService : IAuthService
+    private readonly IUserRepository _userRepository;
+    private readonly ITokenService _tokenService;
+    private readonly IMapper _mapper;
+
+    public AuthService(IUserRepository userRepository, ITokenService tokenService, IMapper mapper)
     {
-        private readonly IUserRepository _userRepository;
-        private readonly ITokenService _tokenService;
-        private readonly IMapper _mapper;
+        _userRepository = userRepository;
+        _tokenService = tokenService;
+        _mapper = mapper;
+    }
 
-        public AuthService(IUserRepository userRepository, ITokenService tokenService, IMapper mapper)
-        {
-            _userRepository = userRepository;
-            _tokenService = tokenService;
-            _mapper = mapper;
-        }
-
-        public async Task<ServiceResponse<AuthResponseDto>> RegisterAsync(RegisterUserDto dto)
+    public async Task<ServiceResponse<AuthResponseDto>> RegisterAsync(RegisterUserDto dto)
+    {
+        try
         {
             var existingUser = await _userRepository.GetByEmailAsync(dto.Email);
             if (existingUser != null)
@@ -56,8 +57,20 @@ namespace CloudFileStorage.AuthApi.Services
                 StatusCode = 201
             };
         }
+        catch (Exception ex)
+        {
+            return new ServiceResponse<AuthResponseDto>
+            {
+                Success = false,
+                StatusCode = 500,
+                Message = ex.Message
+            };
+        }
+    }
 
-        public async Task<ServiceResponse<AuthResponseDto>> LoginAsync(LoginUserDto dto)
+    public async Task<ServiceResponse<AuthResponseDto>> LoginAsync(LoginUserDto dto)
+    {
+        try
         {
             var user = await _userRepository.GetByEmailAsync(dto.Email);
             if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
@@ -88,8 +101,20 @@ namespace CloudFileStorage.AuthApi.Services
                 StatusCode = 200
             };
         }
+        catch (Exception ex)
+        {
+            return new ServiceResponse<AuthResponseDto>
+            {
+                Success = false,
+                StatusCode = 500,
+                Message = ex.Message
+            };
+        }
+    }
 
-        public async Task<ServiceResponse<AuthResponseDto>> RefreshTokenAsync(string refreshToken)
+    public async Task<ServiceResponse<AuthResponseDto>> RefreshTokenAsync(string refreshToken)
+    {
+        try
         {
             var user = await _userRepository.GetByRefreshTokenAsync(refreshToken);
 
@@ -119,6 +144,15 @@ namespace CloudFileStorage.AuthApi.Services
                 },
                 Message = ResponseMessages.RefreshTokenSuccess,
                 StatusCode = 200
+            };
+        }
+        catch (Exception ex)
+        {
+            return new ServiceResponse<AuthResponseDto>
+            {
+                Success = false,
+                StatusCode = 500,
+                Message = ex.Message
             };
         }
     }

@@ -17,7 +17,7 @@ namespace CloudFileStorage.AuthApi.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.5");
 
-            modelBuilder.Entity("CloudFileStorage.AuthApi.Models.User", b =>
+            modelBuilder.Entity("CloudFileStorage.AuthApi.Models.Entities.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -25,10 +25,12 @@ namespace CloudFileStorage.AuthApi.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PasswordHash")
@@ -36,6 +38,7 @@ namespace CloudFileStorage.AuthApi.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("RefreshToken")
+                        .HasMaxLength(500)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("RefreshTokenExpireDate")

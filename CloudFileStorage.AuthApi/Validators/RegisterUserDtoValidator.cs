@@ -1,5 +1,5 @@
-﻿using CloudFileStorage.AuthApi.Constants;
-using CloudFileStorage.AuthApi.DTOs;
+﻿using CloudFileStorage.Common.Constants;
+using CloudFileStorage.AuthApi.Models.DTOs;
 using FluentValidation;
 
 namespace CloudFileStorage.AuthApi.Validators

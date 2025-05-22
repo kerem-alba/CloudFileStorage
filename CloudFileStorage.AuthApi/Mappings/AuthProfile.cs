@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using CloudFileStorage.AuthApi.DTOs;
-using CloudFileStorage.AuthApi.Enums;
-using CloudFileStorage.AuthApi.Models;
+using CloudFileStorage.AuthApi.Common.Enums;
+using CloudFileStorage.AuthApi.Models.DTOs;
+using CloudFileStorage.AuthApi.Models.Entities;
 
 namespace CloudFileStorage.AuthApi.Mappings
 {

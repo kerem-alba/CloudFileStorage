@@ -1,4 +1,5 @@
-﻿using CloudFileStorage.AuthApi.Models;
+﻿using CloudFileStorage.AuthApi.Models.Entities;
+using CloudFileStorage.AuthApi.Services.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -37,11 +38,11 @@ namespace CloudFileStorage.AuthApi.Services
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public (string Token, DateTime ExpireDate) GenerateRefreshToken()
+        public (string RefreshToken, DateTime RefreshExpire) GenerateRefreshToken()
         {
-            var token = Guid.NewGuid().ToString();
-            var expireDate = DateTime.Now.AddDays(7);
-            return (token, expireDate);
+            var refreshToken = Guid.NewGuid().ToString();
+            var refreshExpireDate = DateTime.Now.AddDays(7);
+            return (refreshToken, refreshExpireDate);
         }
 
         public (string AccessToken, string RefreshToken, DateTime RefreshExpire) GenerateTokens(User user)
