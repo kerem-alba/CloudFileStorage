@@ -7,12 +7,8 @@ namespace CloudFileStorage.Common.Extensions
     {
         public static int GetUserId(this ClaimsPrincipal user)
         {
-            var userIdStr = user.FindFirst(ClaimTypes.NameIdentifier)?.Value
-                         ?? user.FindFirst("sub")?.Value
-                         ?? user.FindFirst("id")?.Value;
-
+            var userIdStr = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             return string.IsNullOrEmpty(userIdStr) ? 0 : int.Parse(userIdStr);
         }
-
     }
 }

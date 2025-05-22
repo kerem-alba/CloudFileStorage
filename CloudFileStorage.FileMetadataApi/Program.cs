@@ -1,11 +1,15 @@
-using CloudFileStorage.FileMetadataApi.Contexts;
-using CloudFileStorage.FileMetadataApi.Repositories;
-using CloudFileStorage.FileMetadataApi.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-
+using SMediator.Core;
+using FluentValidation;
+using CloudFileStorage.FileMetadataApi.Contexts;
+using CloudFileStorage.FileMetadataApi.Repositories;
+using CloudFileStorage.FileMetadataApi.Services;
+using CloudFileStorage.FileMetadataApi.Repositories.Interfaces;
+using CloudFileStorage.FileMetadataApi.Services.Interfaces;
+using CloudFileStorage.FileMetadataApi.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,7 +48,6 @@ builder.Services.AddSwaggerGen(o =>
             Array.Empty<string>()
         }
     };
-
     o.AddSecurityRequirement(securityRequirement);
 });
 
@@ -64,16 +67,18 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)),
         };
     });
 
-
-
+builder.Services.AddSMediator(typeof(Program).Assembly);
 builder.Services.AddAutoMapper(typeof(Program));
-builder.Services.AddScoped<IFileRepository, FileRepository>();
-builder.Services.AddScoped<IFileService, FileService>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateFileDtoValidator>();
 
+builder.Services.AddScoped<IFileMetadataRepository, FileMetadataRepository>();
+builder.Services.AddScoped<IFileMetadataService, FilemetadataService>();
+builder.Services.AddScoped<IFileShareMetadataService, FileShareMetadataService>();
+builder.Services.AddScoped<IFileShareMetadataRepository, FileShareMetadataRepository>();
 
 
 var app = builder.Build();

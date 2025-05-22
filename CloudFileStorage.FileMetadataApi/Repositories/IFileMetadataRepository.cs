@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace CloudFileStorage.FileMetadataApi.Repositories
 {
-    public interface IFileRepository
+    public interface IFileMetadataRepository
     {
         Task AddAsync(FileMetadata file);
         Task<List<FileMetadata>> GetAllByOwnerIdAsync(int ownerId);

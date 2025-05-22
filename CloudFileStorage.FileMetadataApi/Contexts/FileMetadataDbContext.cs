@@ -10,5 +10,7 @@ namespace CloudFileStorage.FileMetadataApi.Contexts
         {
         }
         public DbSet<FileMetadata> Files { get; set; }
+        public DbSet<FileShareMetadata> FileShareMetadatas { get; set; } = null!;
+
     }
 }

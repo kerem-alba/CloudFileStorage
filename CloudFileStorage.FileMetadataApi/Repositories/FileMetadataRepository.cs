@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CloudFileStorage.FileMetadataApi.Repositories
 {
-    public class FileRepository : IFileRepository
+    public class FileMetadataRepository : IFileMetadataRepository
     {
         private readonly FileMetadataDbContext _context;
 
-        public FileRepository(FileMetadataDbContext context)
+        public FileMetadataRepository(FileMetadataDbContext context)
         {
             _context = context;
         }

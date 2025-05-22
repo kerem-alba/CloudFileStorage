@@ -1,8 +1,8 @@
 ﻿using CloudFileStorage.Common.Extensions;
+using CloudFileStorage.AuthApi.CQRS.Auth.Commands;
 using CloudFileStorage.AuthApi.Models.DTOs;
-using CloudFileStorage.AuthApi.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-
+using SMediator.Core.Abstractions;
 
 namespace CloudFileStorage.AuthApi.Controllers
 {
@@ -10,34 +10,32 @@ namespace CloudFileStorage.AuthApi.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly IAuthService _authService;
+        private readonly IMediator _mediator;
 
-        public AuthController(IAuthService authService)
+        public AuthController(IMediator mediator)
         {
-            _authService = authService;
+            _mediator = mediator;
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterUserDto dto)
+        public async Task<IActionResult> Register([FromBody] RegisterUserDto dto)
         {
-            var response = await _authService.RegisterAsync(dto);
+            var response = await _mediator.Send(new RegisterCommand(dto));
             return this.HandleResponse(response);
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginUserDto dto)
+        public async Task<IActionResult> Login([FromBody] LoginUserDto dto)
         {
-            var response = await _authService.LoginAsync(dto);
+            var response = await _mediator.Send(new LoginCommand(dto));
             return this.HandleResponse(response);
         }
 
         [HttpPost("refresh")]
         public async Task<IActionResult> Refresh([FromBody] RefreshTokenDto request)
         {
-            var response = await _authService.RefreshTokenAsync(request.RefreshToken);
+            var response = await _mediator.Send(new RefreshTokenCommand(request.RefreshToken));
             return this.HandleResponse(response);
         }
-
-
     }
 }

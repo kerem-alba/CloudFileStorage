@@ -15,5 +15,16 @@
         public const string FileUpdated = "Dosya bilgisi başarıyla güncellendi.";
         public const string FileDeleted = "Dosya bilgisi başarıyla silindi.";
         public const string FileNotFound = "Dosya bulunamadı.";
+
+        public const string FileShareFetched = "Paylaşılan dosyalar başarıyla getirildi.";
+        public const string NoFilesSharedWithYou = "Size paylaşılan dosya bulunmamaktadır.";
+        public const string FilesFetched = "Dosyalar başarıyla getirildi.";
+        public const string NoFilesFound = "Herhangi bir dosya bulunamadı.";
+        public const string FileShareCreated = "Dosya paylaşımı başarıyla oluşturuldu.";
+        public const string FileShareDeleted = "Dosya paylaşımı başarıyla kaldırıldı.";
+        public const string FileShareUpdated = "Dosya paylaşımı başarıyla güncellendi.";
+        public const string FileShareNotFound = "Dosya paylaşımı bulunamadı.";
+        public const string InternalServerError = "Beklenmeyen bir hata oluştu.";
+
     }
 }

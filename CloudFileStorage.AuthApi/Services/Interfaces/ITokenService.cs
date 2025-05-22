@@ -5,7 +5,7 @@ namespace CloudFileStorage.AuthApi.Services.Interfaces
     public interface ITokenService
     {
         string GenerateJwt(User user);
-        (string Token, DateTime ExpireDate) GenerateRefreshToken();
+        (string RefreshToken, DateTime RefreshExpire) GenerateRefreshToken();
         (string AccessToken, string RefreshToken, DateTime RefreshExpire) GenerateTokens(User user);
 
     }
