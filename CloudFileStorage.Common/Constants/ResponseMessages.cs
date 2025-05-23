@@ -26,5 +26,14 @@
         public const string FileShareNotFound = "Dosya paylaşımı bulunamadı.";
         public const string InternalServerError = "Beklenmeyen bir hata oluştu.";
 
+        public const string FileNotSelected = "Dosya seçilmedi.";
+        public const string FileUploadSuccess = "Dosya başarıyla yüklendi.";
+        public const string FileUploadFail = "Dosya yükleme işlemi sırasında bir hata oluştu.";
+
+        public const string FileNameRequired = "Dosya adı zorunludur.";
+        public const string FileDownloadSuccess = "Dosya başarıyla indirildi.";
+        public const string FileDownloadFail = "Dosya indirilirken bir hata oluştu: {0}";
+
+
     }
 }
