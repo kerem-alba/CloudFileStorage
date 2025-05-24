@@ -1,0 +1,31 @@
+﻿@model CloudFileStorage.UI.Models.DTOs.FileMetadataDto
+
+@{
+    ViewData["Title"] = "Dosya Detayı";
+}
+
+<div class="container mt-5" style="max-width: 600px;">
+    <h2 class="mb-4 text-center">Dosya Detayı</h2>
+
+    <div class="card">
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-4">Dosya Adı</dt>
+                <dd class="col-sm-8">@Model.Name</dd>
+
+                <dt class="col-sm-4">Açıklama</dt>
+                <dd class="col-sm-8">@Model.Description</dd>
+
+                <dt class="col-sm-4">Yükleme Tarihi</dt>
+                <dd class="col-sm-8">@Model.UploadDate.ToString("dd.MM.yyyy HH:mm")</dd>
+
+                <dt class="col-sm-4">Sahip Kullanıcı ID</dt>
+                <dd class="col-sm-8">@Model.OwnerId</dd>
+            </dl>
+        </div>
+    </div>
+
+    <div class="mt-4 text-center">
+        <a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
+    </div>
+</div>

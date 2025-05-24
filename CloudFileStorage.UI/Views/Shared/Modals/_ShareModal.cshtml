@@ -1,0 +1,49 @@
+﻿@model int
+
+<div class="modal fade" id="shareModal-@Model" tabindex="-1" aria-labelledby="shareModalLabel-@Model" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-controller="Home" asp-action="Share" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="shareModalLabel-@Model">Dosyayı Paylaş</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                </div>
+
+                <div class="modal-body">
+                    <input type="hidden" name="FileMetadataId" value="@Model" />
+
+                    <div class="mb-3">
+                        <label class="form-label">Paylaşım Türü</label>
+                        <select name="ShareType" class="form-select" id="shareTypeSelect-@Model" onchange="toggleUserIdInput(@Model)">
+                            <option value="private">Özel</option>
+                            <option value="public">Herkese Açık</option>
+                            <option value="specific">Belirli Kullanıcılar</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3" id="userIdsInput-@Model" style="display: none;">
+                        <label class="form-label">Kullanıcı Seç</label>
+                        @await Component.InvokeAsync("UserList")
+                    </div>
+
+                    <input type="hidden" name="Permission" value="Read" />
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function toggleUserIdInput(id) {
+            const select = document.getElementById(`shareTypeSelect-${id}`);
+            const inputDiv = document.getElementById(`userIdsInput-${id}`);
+            inputDiv.style.display = select.value === "specific" ? "block" : "none";
+        }
+    </script>
+}

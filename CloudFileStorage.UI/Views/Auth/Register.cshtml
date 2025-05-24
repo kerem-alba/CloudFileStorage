@@ -1,0 +1,42 @@
+﻿@model CloudFileStorage.UI.Models.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Kayıt Ol";
+}
+
+<div class="container mt-5" style="max-width: 400px;">
+    <h2 class="text-center mb-4">Kayıt Ol</h2>
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">@ViewBag.Error</div>
+    }
+
+    <form asp-action="Register" method="post">
+        <div class="mb-3">
+            <label asp-for="Email" class="form-label">Email</label>
+            <input asp-for="Email" class="form-control" placeholder="ornek@mail.com" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Password" class="form-label">Şifre</label>
+            <input asp-for="Password" type="password" class="form-control" placeholder="••••••••" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="ConfirmPassword" class="form-label">Şifre (Tekrar)</label>
+            <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="••••••••" />
+            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+        </div>
+
+        <div class="d-grid mb-3">
+            <button type="submit" class="btn btn-success">Kayıt Ol</button>
+        </div>
+
+        <div class="text-center">
+            <p>Zaten hesabınız var mı? <a href="@Url.Action("Login", "Auth")">Giriş Yap</a></p>
+        </div>
+    </form>
+</div>

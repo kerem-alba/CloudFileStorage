@@ -21,5 +21,7 @@ namespace CloudFileStorage.FileMetadataApi.Models.Entities
 
         [Required]
         public DateTime UploadDate { get; set; }
+
+        public bool IsPublic { get; set; } = false;
     }
 }

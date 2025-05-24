@@ -24,6 +24,7 @@
         public const string FileShareDeleted = "Dosya paylaşımı başarıyla kaldırıldı.";
         public const string FileShareUpdated = "Dosya paylaşımı başarıyla güncellendi.";
         public const string FileShareNotFound = "Dosya paylaşımı bulunamadı.";
+        public const string FileShareFailed = "Dosya paylaşımı başarısız oldu: {0}";
         public const string InternalServerError = "Beklenmeyen bir hata oluştu.";
 
         public const string FileNotSelected = "Dosya seçilmedi.";
@@ -33,7 +34,6 @@
         public const string FileNameRequired = "Dosya adı zorunludur.";
         public const string FileDownloadSuccess = "Dosya başarıyla indirildi.";
         public const string FileDownloadFail = "Dosya indirilirken bir hata oluştu: {0}";
-
 
     }
 }
