@@ -2,30 +2,23 @@
 
 @{
     ViewData["Title"] = "Dosya Detayı";
+    var fileType = System.IO.Path.GetExtension(Model.FileName);
 }
 
 <div class="container mt-5" style="max-width: 600px;">
-    <h2 class="mb-4 text-center">Dosya Detayı</h2>
+    <h3 class="mb-4 text-center">@Model.Name</h3>
 
-    <div class="card">
-        <div class="card-body">
-            <dl class="row">
-                <dt class="col-sm-4">Dosya Adı</dt>
-                <dd class="col-sm-8">@Model.Name</dd>
-
-                <dt class="col-sm-4">Açıklama</dt>
-                <dd class="col-sm-8">@Model.Description</dd>
-
-                <dt class="col-sm-4">Yükleme Tarihi</dt>
-                <dd class="col-sm-8">@Model.UploadDate.ToString("dd.MM.yyyy HH:mm")</dd>
-
-                <dt class="col-sm-4">Sahip Kullanıcı ID</dt>
-                <dd class="col-sm-8">@Model.OwnerId</dd>
-            </dl>
-        </div>
-    </div>
+    <ul class="list-group">
+        <li class="list-group-item"><strong>Açıklama:</strong> @Model.Description</li>
+        <li class="list-group-item"><strong>Yükleme Tarihi:</strong> @Model.UploadDate.ToString("dd.MM.yyyy")</li>
+        <li class="list-group-item"><strong>Sahibi:</strong> @Model.OwnerName</li>
+        <li class="list-group-item"><strong>Dosya Tipi:</strong> @fileType</li>
+    </ul>
 
     <div class="mt-4 text-center">
+        <a asp-action="Download" asp-route-fileName="@Model.FileName" class="btn btn-outline-primary me-2">
+            Dosyayı İndir
+        </a>
         <a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
     </div>
 </div>

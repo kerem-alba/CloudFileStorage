@@ -44,6 +44,8 @@ public class FileStorageService : IFileStorageService
         }
         catch (Exception ex)
         {
+            Console.WriteLine($"Upload exception: {ex.Message}");
+
             return new ServiceResponse<string>
             {
                 Success = false,

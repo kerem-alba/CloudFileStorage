@@ -11,6 +11,10 @@
         public const string RefreshTokenSuccess = "Yenileme tokeni başarıyla yenilendi.";
         public const string RegisterSuccess = "Kayıt işlemi başarılı.";
 
+        public const string UserNotFound = "Kullanıcı bulunamadı.";
+        public const string UserFetched = "Kullanıcı bilgileri başarıyla getirildi.";
+
+
         public const string FileCreated = "Dosya bilgisi başarıyla oluşturuldu.";
         public const string FileUpdated = "Dosya bilgisi başarıyla güncellendi.";
         public const string FileDeleted = "Dosya bilgisi başarıyla silindi.";

@@ -8,39 +8,54 @@ namespace CloudFileStorage.UI.Services
 {
     public class FileService : IFileService
     {
-        private readonly ApiRequestHelper _api;
+        private readonly ApiRequestHelper _apiRequestHelper;
 
-        public FileService(ApiRequestHelper api)
+        public FileService(ApiRequestHelper ApiRequestHelper)
         {
-            _api = api;
+            _apiRequestHelper = ApiRequestHelper;
         }
 
         public Task<ServiceResponse<List<FileMetadataDto>>?> GetAllAsync(string token)
         {
-            return _api.GetAsync<List<FileMetadataDto>>(ApiEndpoints.FileMetadata.GetAll, token);
+            return _apiRequestHelper.GetAsync<List<FileMetadataDto>>(ApiEndpoints.FileMetadata.GetAll, token);
         }
 
         public Task<ServiceResponse<FileMetadataDto>?> GetByIdAsync(int id, string token)
         {
             var url = ApiEndpoints.FileMetadata.GetById.Replace("{id}", id.ToString());
-            return _api.GetAsync<FileMetadataDto>(url, token);
+            return _apiRequestHelper.GetAsync<FileMetadataDto>(url, token);
         }
 
         public Task<ServiceResponse<FileMetadataDto>?> CreateAsync(CreateFileDto dto, string token)
         {
-            return _api.PostAsync<CreateFileDto, FileMetadataDto>(ApiEndpoints.FileMetadata.Create, dto, token);
+            return _apiRequestHelper.PostAsync<CreateFileDto, FileMetadataDto>(ApiEndpoints.FileMetadata.Create, dto, token);
         }
 
         public Task<ServiceResponse<FileMetadataDto>?> UpdateAsync(int id, UpdateFileDto dto, string token)
         {
             var url = ApiEndpoints.FileMetadata.Update.Replace("{id}", id.ToString());
-            return _api.PutAsync<UpdateFileDto, FileMetadataDto>(url, dto, token);
+            return _apiRequestHelper.PutAsync<UpdateFileDto, FileMetadataDto>(url, dto, token);
         }
 
-        public Task<ServiceResponse<bool>?> DeleteAsync(int id, string token)
+        public Task<ServiceResponse<object>?> DeleteAsync(int id, string token)
         {
             var url = ApiEndpoints.FileMetadata.Delete.Replace("{id}", id.ToString());
-            return _api.DeleteAsync<bool>(url, token);
+            return _apiRequestHelper.DeleteAsync<object>(url, token);
         }
+
+        public Task<ServiceResponse<string>?> UploadAsync(IFormFile file, string token)
+        {
+            return _apiRequestHelper.PostFileAsync<string>(ApiEndpoints.FileStorage.Upload, file, token);
+        }
+
+        public Task<ServiceResponse<byte[]>?> DownloadAsync(string fileName, string token)
+        {
+            var encodedFileName = Uri.EscapeDataString(fileName);
+            var url = ApiEndpoints.FileStorage.Download + $"?fileName={encodedFileName}";
+            return _apiRequestHelper.GetFileAsync(url, token);
+        }
+
+
+
     }
 }

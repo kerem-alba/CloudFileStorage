@@ -17,6 +17,9 @@ namespace CloudFileStorage.FileMetadataApi.Models.Entities
         public string? Description { get; set; }
 
         [Required]
+        public string FileName { get; set; } = null!;
+
+        [Required]
         public int OwnerId { get; set; }
 
         [Required]
