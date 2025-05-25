@@ -9,6 +9,10 @@
             public const string Login = $"{Base}/login";
             public const string Register = $"{Base}/register";
             public const string Refresh = $"{Base}/refresh";
+
+            public const string UsersBase = $"{GatewayBase}/User";
+            public const string GetUserNameById = $"{UsersBase}/{{id}}";
+            public const string GetAllUsers = $"{UsersBase}";
         }
 
         public static class FileMetadata
@@ -32,7 +36,7 @@
 
         public static class FileStorage
         {
-            public const string Base = $"{GatewayBase}/Storage";
+            public const string Base = $"{GatewayBase}/FileStorage";
             public const string Upload = $"{Base}/upload";
             public const string Download = $"{Base}/download";
         }

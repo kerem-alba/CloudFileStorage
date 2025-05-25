@@ -1,6 +1,7 @@
 ﻿using CloudFileStorage.Common.Extensions;
 using CloudFileStorage.FileStorageApi.CQRS.Commands;
 using CloudFileStorage.FileStorageApi.CQRS.Queries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SMediator.Core.Abstractions;
 
