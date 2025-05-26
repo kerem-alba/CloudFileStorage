@@ -13,6 +13,7 @@
 
         public const string UserNotFound = "Kullanıcı bulunamadı.";
         public const string UserFetched = "Kullanıcı bilgileri başarıyla getirildi.";
+        public const string UsersFetched = "Kullanıcılar başarıyla getirildi.";
 
 
         public const string FileCreated = "Dosya bilgisi başarıyla oluşturuldu.";
@@ -33,7 +34,7 @@
 
         public const string FileNotSelected = "Dosya seçilmedi.";
         public const string FileUploadSuccess = "Dosya başarıyla yüklendi.";
-        public const string FileUploadFail = "Dosya yükleme işlemi sırasında bir hata oluştu.";
+        public const string FileUploadFail = "Dosya yükleme işlemi sırasında bir hata oluştu: {0}";
 
         public const string FileNameRequired = "Dosya adı zorunludur.";
         public const string FileDownloadSuccess = "Dosya başarıyla indirildi.";

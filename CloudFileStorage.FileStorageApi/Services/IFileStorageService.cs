@@ -6,8 +6,5 @@ namespace CloudFileStorage.FileStorageApi.Services
     {
         Task<ServiceResponse<string>> UploadFileAsync(IFormFile file);
         Task<ServiceResponse<byte[]>> DownloadFileAsync(string fileName);
-
     }
-
-
 }

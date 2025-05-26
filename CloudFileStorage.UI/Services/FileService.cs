@@ -9,50 +9,52 @@ namespace CloudFileStorage.UI.Services
     public class FileService : IFileService
     {
         private readonly ApiRequestHelper _apiRequestHelper;
+        private readonly FileRequestHelper _fileRequestHelper;
 
-        public FileService(ApiRequestHelper ApiRequestHelper)
+        public FileService(ApiRequestHelper apiRequestHelper, FileRequestHelper fileRequestHelper)
         {
-            _apiRequestHelper = ApiRequestHelper;
+            _apiRequestHelper = apiRequestHelper;
+            _fileRequestHelper = fileRequestHelper;
         }
 
-        public Task<ServiceResponse<List<FileMetadataDto>>?> GetAllAsync(string token)
+        public Task<ServiceResponse<List<FileMetadataDto>>?> GetAllAsync()
         {
-            return _apiRequestHelper.GetAsync<List<FileMetadataDto>>(ApiEndpoints.FileMetadata.GetAll, token);
+            return _apiRequestHelper.GetAsync<List<FileMetadataDto>>(ApiEndpoints.FileMetadata.GetAll);
         }
 
-        public Task<ServiceResponse<FileMetadataDto>?> GetByIdAsync(int id, string token)
+        public Task<ServiceResponse<FileMetadataDto>?> GetByIdAsync(int id)
         {
             var url = ApiEndpoints.FileMetadata.GetById.Replace("{id}", id.ToString());
-            return _apiRequestHelper.GetAsync<FileMetadataDto>(url, token);
+            return _apiRequestHelper.GetAsync<FileMetadataDto>(url);
         }
 
-        public Task<ServiceResponse<FileMetadataDto>?> CreateAsync(CreateFileDto dto, string token)
+        public Task<ServiceResponse<FileMetadataDto>?> CreateAsync(CreateFileDto dto)
         {
-            return _apiRequestHelper.PostAsync<CreateFileDto, FileMetadataDto>(ApiEndpoints.FileMetadata.Create, dto, token);
+            return _apiRequestHelper.PostAsync<CreateFileDto, FileMetadataDto>(ApiEndpoints.FileMetadata.Create, dto);
         }
 
-        public Task<ServiceResponse<FileMetadataDto>?> UpdateAsync(int id, UpdateFileDto dto, string token)
+        public Task<ServiceResponse<FileMetadataDto>?> UpdateAsync(int id, UpdateFileDto dto)
         {
             var url = ApiEndpoints.FileMetadata.Update.Replace("{id}", id.ToString());
-            return _apiRequestHelper.PutAsync<UpdateFileDto, FileMetadataDto>(url, dto, token);
+            return _apiRequestHelper.PutAsync<UpdateFileDto, FileMetadataDto>(url, dto);
         }
 
-        public Task<ServiceResponse<object>?> DeleteAsync(int id, string token)
+        public Task<ServiceResponse<object>?> DeleteAsync(int id)
         {
             var url = ApiEndpoints.FileMetadata.Delete.Replace("{id}", id.ToString());
-            return _apiRequestHelper.DeleteAsync<object>(url, token);
+            return _apiRequestHelper.DeleteAsync<object>(url);
         }
 
-        public Task<ServiceResponse<string>?> UploadAsync(IFormFile file, string token)
+        public Task<ServiceResponse<string>?> UploadAsync(IFormFile file)
         {
-            return _apiRequestHelper.PostFileAsync<string>(ApiEndpoints.FileStorage.Upload, file, token);
+            return _fileRequestHelper.PostFileAsync<string>(ApiEndpoints.FileStorage.Upload, file);
         }
 
-        public Task<ServiceResponse<byte[]>?> DownloadAsync(string fileName, string token)
+        public Task<ServiceResponse<byte[]>?> DownloadAsync(string fileName)
         {
             var encodedFileName = Uri.EscapeDataString(fileName);
             var url = ApiEndpoints.FileStorage.Download + $"?fileName={encodedFileName}";
-            return _apiRequestHelper.GetFileAsync(url, token);
+            return _fileRequestHelper.GetFileAsync(url);
         }
 
 

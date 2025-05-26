@@ -15,8 +15,7 @@ namespace CloudFileStorage.UI.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var token = HttpContext.Session.GetString("token");
-            var result = await _userService.GetAllUsersAsync(token);
+            var result = await _userService.GetAllUsersAsync();
             var users = result.Success && result.Data != null ? result.Data : new List<UserDto>();
 
             return View(users);

@@ -13,6 +13,7 @@
             public const string UsersBase = $"{GatewayBase}/User";
             public const string GetUserNameById = $"{UsersBase}/{{id}}";
             public const string GetAllUsers = $"{UsersBase}";
+            public const string GetUserList = $"{UsersBase}/list";
         }
 
         public static class FileMetadata

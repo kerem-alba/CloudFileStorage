@@ -8,6 +8,5 @@ namespace CloudFileStorage.UI.Services.Interfaces
     {
         Task<ServiceResponse<AuthResponseDto>?> LoginAsync(LoginUserDto dto);
         Task<ServiceResponse<AuthResponseDto>?> RegisterAsync(RegisterUserDto dto);
-
     }
 }

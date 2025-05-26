@@ -5,19 +5,13 @@
 }
 
 <div class="container mt-5">
-    <h2 class="mb-4">Dosya Listesi</h2>
+    <h2 class="mb-4">Dosyalarım</h2>
 
-    <a asp-action="Create" class="btn btn-success mb-3">Yeni Dosya Ekle</a>
-
-    @if (TempData["Success"] != null)
-    {
-        <div class="alert alert-success">@TempData["Success"]</div>
-    }
-
-    @if (TempData["Error"] != null)
-    {
-        <div class="alert alert-danger">@TempData["Error"]</div>
-    }
+    <a asp-action="Create"
+       class="btn btn-success rounded-circle d-flex justify-content-center align-items-center pb-3"
+       style="width: 64px; height: 64px; font-size: 52px">
+        <span>+</span>
+    </a>
 
     @await Component.InvokeAsync("FileTable", Model)
 </div>

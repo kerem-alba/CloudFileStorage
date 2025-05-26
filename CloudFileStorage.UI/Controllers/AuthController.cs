@@ -34,6 +34,7 @@ namespace CloudFileStorage.UI.Controllers
             if (result is not null && result.Success && result.Data is not null)
             {
                 HttpContext.Session.SetString("token", result.Data.AccessToken);
+                HttpContext.Session.SetString("refreshToken", result.Data.RefreshToken);
                 return RedirectToAction("Index", "Home");
             }
 
@@ -63,11 +64,19 @@ namespace CloudFileStorage.UI.Controllers
             if (result is not null && result.Success && result.Data is not null)
             {
                 HttpContext.Session.SetString("token", result.Data.AccessToken);
+                HttpContext.Session.SetString("refreshToken", result.Data.RefreshToken);
                 return RedirectToAction("Index", "Home");
             }
 
             ViewBag.Error = result?.Message ?? UiMessages.SomethingWentWrong;
             return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Login");
         }
     }
 }

@@ -9,17 +9,20 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient();
 builder.Services.AddSession();
+builder.Services.AddHttpContextAccessor();
+
 
 // Auth servislerini ekle
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IFileShareService, FileShareService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ITokenManager, TokenManager>();
+builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 
 builder.Services.AddAutoMapper(typeof(AuthProfile));
 builder.Services.AddScoped<ApiRequestHelper>();
-
-
+builder.Services.AddScoped<FileRequestHelper>();
 
 var app = builder.Build();
 
