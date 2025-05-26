@@ -28,7 +28,7 @@ builder.Services.AddSwaggerGen(o =>
         Description = "Enter your JWT token in this field.",
         In = Microsoft.OpenApi.Models.ParameterLocation.Header,
         Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
-        Scheme = JwtBearerDefaults.AuthenticationScheme, // "bearer"
+        Scheme = JwtBearerDefaults.AuthenticationScheme,
         BearerFormat = "JWT"
     };
 
