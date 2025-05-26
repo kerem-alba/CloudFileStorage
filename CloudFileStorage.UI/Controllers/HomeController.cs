@@ -11,7 +11,6 @@ namespace CloudFileStorage.UI.Controllers
         private readonly IFileShareService _fileShareService;
         private readonly IUserService _userService;
 
-
         public HomeController(IFileService fileService, IFileShareService fileShareService, IUserService userService)
         {
             _fileService = fileService;
@@ -26,7 +25,7 @@ namespace CloudFileStorage.UI.Controllers
             if (string.IsNullOrEmpty(token))
                 return RedirectToAction("Login", "Auth");
 
-            var result = await _fileService.GetAllAsync(token);
+            var result = await _fileService.GetAllAsync();
 
             if (result == null || !result.Success || result.Data == null)
             {
@@ -44,7 +43,7 @@ namespace CloudFileStorage.UI.Controllers
             if (string.IsNullOrEmpty(token))
                 return RedirectToAction("Login", "Auth");
 
-            var result = await _fileShareService.GetSharedWithMeAsync(token);
+            var result = await _fileShareService.GetSharedWithMeAsync();
 
             if (result == null || !result.Success || result.Data == null)
             {
@@ -62,7 +61,7 @@ namespace CloudFileStorage.UI.Controllers
             if (string.IsNullOrEmpty(token))
                 return RedirectToAction("Login", "Auth");
 
-            var result = await _fileShareService.ShareFileAsync(dto, token);
+            var result = await _fileShareService.ShareFileAsync(dto);
 
             if (result == null || !result.Success)
             {
@@ -83,7 +82,7 @@ namespace CloudFileStorage.UI.Controllers
             if (string.IsNullOrEmpty(token))
                 return RedirectToAction("Login", "Auth");
 
-            var result = await _fileService.GetByIdAsync(id, token);
+            var result = await _fileService.GetByIdAsync(id);
             if (result == null || !result.Success || result.Data == null)
             {
                 ViewBag.Error = result?.Message ?? UiMessages.GetFileDetailsFailed;
@@ -91,14 +90,8 @@ namespace CloudFileStorage.UI.Controllers
             }
             var file = result.Data;
 
-            var userResult = await _userService.GetUserNameByIdAsync(file.OwnerId, token);
+            var userResult = await _userService.GetUserNameByIdAsync(file.OwnerId);
             file.OwnerName = userResult?.Data ?? UiMessages.NoName;
-
-            if (result == null || !result.Success || result.Data == null)
-            {
-                ViewBag.Error = result?.Message ?? UiMessages.GetFileDetailsFailed;
-                return RedirectToAction("Index");
-            }
 
             return View(result.Data);
         }
@@ -116,7 +109,7 @@ namespace CloudFileStorage.UI.Controllers
             if (string.IsNullOrEmpty(token))
                 return RedirectToAction("Login", "Auth");
 
-            var uploadResult = await _fileService.UploadAsync(dto.File, token);
+            var uploadResult = await _fileService.UploadAsync(dto.File);
 
             if (uploadResult == null || !uploadResult.Success || string.IsNullOrEmpty(uploadResult.Data))
             {
@@ -126,7 +119,7 @@ namespace CloudFileStorage.UI.Controllers
 
             dto.FileName = uploadResult.Data;
 
-            var result = await _fileService.CreateAsync(dto, token);
+            var result = await _fileService.CreateAsync(dto);
 
             if (result == null || !result.Success)
             {
@@ -145,7 +138,7 @@ namespace CloudFileStorage.UI.Controllers
             if (string.IsNullOrEmpty(token))
                 return RedirectToAction("Login", "Auth");
 
-            var result = await _fileService.GetByIdAsync(id, token);
+            var result = await _fileService.GetByIdAsync(id);
 
             if (result == null || !result.Success || result.Data == null)
                 return RedirectToAction("Index");
@@ -167,7 +160,7 @@ namespace CloudFileStorage.UI.Controllers
             if (string.IsNullOrEmpty(token))
                 return RedirectToAction("Login", "Auth");
 
-            var result = await _fileService.UpdateAsync(id, dto, token);
+            var result = await _fileService.UpdateAsync(id, dto);
 
             if (result == null || !result.Success)
             {
@@ -176,7 +169,7 @@ namespace CloudFileStorage.UI.Controllers
                 return View(dto);
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Detail", new { id = dto.Id });
         }
 
         [HttpPost]
@@ -186,7 +179,7 @@ namespace CloudFileStorage.UI.Controllers
             if (string.IsNullOrEmpty(token))
                 return RedirectToAction("Login", "Auth");
 
-            var result = await _fileService.DeleteAsync(id, token);
+            var result = await _fileService.DeleteAsync(id);
 
             if (result == null || !result.Success)
             {
@@ -202,7 +195,7 @@ namespace CloudFileStorage.UI.Controllers
             if (string.IsNullOrEmpty(token))
                 return RedirectToAction("Login", "Auth");
 
-            var result = await _fileService.DownloadAsync(fileName, token);
+            var result = await _fileService.DownloadAsync(fileName);
 
             if (result == null || !result.Success || result.Data == null)
             {

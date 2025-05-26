@@ -5,21 +5,21 @@ using CloudFileStorage.UI.Models.DTOs;
 
 public class UserService : IUserService
 {
-    private readonly ApiRequestHelper _api;
+    private readonly ApiRequestHelper _apiRequestHelper;
 
-    public UserService(ApiRequestHelper api)
+    public UserService(ApiRequestHelper apiRequestHelper)
     {
-        _api = api;
+        _apiRequestHelper = apiRequestHelper;
     }
 
-    public Task<ServiceResponse<List<UserDto>>> GetAllUsersAsync(string token)
+    public Task<ServiceResponse<List<UserDto>>> GetAllUsersAsync()
     {
-        return _api.GetAsync<List<UserDto>>(ApiEndpoints.Auth.GetAllUsers, token);
+        return _apiRequestHelper.GetAsync<List<UserDto>>(ApiEndpoints.Auth.GetAllUsers);
     }
 
-    public Task<ServiceResponse<string>> GetUserNameByIdAsync(int id, string token)
+    public Task<ServiceResponse<string>> GetUserNameByIdAsync(int id)
     {
         var url = ApiEndpoints.Auth.GetUserNameById.Replace("{id}", id.ToString());
-        return _api.GetAsync<string>(url, token);
+        return _apiRequestHelper.GetAsync<string>(url);
     }
 }

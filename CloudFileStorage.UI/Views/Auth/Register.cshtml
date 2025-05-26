@@ -7,12 +7,12 @@
 <div class="container mt-5" style="max-width: 400px;">
     <h2 class="text-center mb-4">Kayıt Ol</h2>
 
-    @if (ViewBag.Error != null)
-    {
-        <div class="alert alert-danger">@ViewBag.Error</div>
-    }
-
     <form asp-action="Register" method="post">
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label">İsim</label>
+            <input asp-for="Name" class="form-control" placeholder="Adınızı girin" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
         <div class="mb-3">
             <label asp-for="Email" class="form-label">Email</label>
             <input asp-for="Email" class="form-control" placeholder="ornek@mail.com" />

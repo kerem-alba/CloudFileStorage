@@ -1,12 +1,13 @@
 ﻿@model List<CloudFileStorage.UI.Models.DTOs.FileMetadataDto>
 
 <div class="table-responsive">
-    <table class="table table-bordered align-middle text-center">
+    <table class="table table-hover align-middle text-center">
         <thead class="table-light">
             <tr>
                 <th>Dosya Adı</th>
                 <th>Yükleme Tarihi</th>
                 <th>İşlemler</th>
+                <th>Paylaş</th>
                 <th></th>
             </tr>
         </thead>
@@ -24,6 +25,12 @@
                         </a>
                     </td>
                     <td>
+                        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#shareModal-@file.Id">
+                            <i class="bi bi-share"></i> Paylaş
+                        </button>
+                        @await Html.PartialAsync("Modals/_ShareModal", file.Id)
+                    </td>
+                    <td>
                         <div class="dropdown">
                             <button class="btn btn-link text-dark p-0" type="button" id="dropdownMenuButton-@file.Id" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-three-dots-vertical fs-5"></i>
@@ -33,7 +40,16 @@
                                     <a class="dropdown-item" asp-controller="Home"
                                        asp-action="Download"
                                        asp-route-fileName="@file.FileName">
-                                        İndir
+                                       <i class="bi bi-download me-2"></i>
+                                        Dosyayı İndir
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Home"
+                                       asp-action="Detail"
+                                       asp-route-id="@file.Id">
+                                        <i class="bi bi-info-circle me-2"></i>
+                                        Bilgileri Düzenle
                                     </a>
                                 </li>
                                 <li>
@@ -44,7 +60,8 @@
                                           onsubmit="return confirm('Bu dosyayı silmek istediğinize emin misiniz?');"
                                           style="display:inline;">
                                         <button type="submit" class="dropdown-item text-danger">
-                                            <i class="bi bi-trash me-2"></i>Sil
+                                            <i class="bi bi-trash me-2"></i>
+                                            Çöp kutusuna taşı
                                         </button>
                                     </form>
                                 </li>

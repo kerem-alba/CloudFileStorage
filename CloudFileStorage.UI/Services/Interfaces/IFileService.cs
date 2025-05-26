@@ -5,12 +5,12 @@ namespace CloudFileStorage.UI.Services.Interfaces
 {
     public interface IFileService
     {
-        Task<ServiceResponse<List<FileMetadataDto>>?> GetAllAsync(string token);
-        Task<ServiceResponse<FileMetadataDto>?> GetByIdAsync(int id, string token);
-        Task<ServiceResponse<FileMetadataDto>?> CreateAsync(CreateFileDto dto, string token);
-        Task<ServiceResponse<FileMetadataDto>?> UpdateAsync(int id, UpdateFileDto dto, string token);
-        Task<ServiceResponse<object>?> DeleteAsync(int id, string token);
-        Task<ServiceResponse<string>?> UploadAsync(IFormFile file, string token);
-        Task<ServiceResponse<byte[]>?> DownloadAsync(string fileName, string token);
+        Task<ServiceResponse<List<FileMetadataDto>>?> GetAllAsync();
+        Task<ServiceResponse<FileMetadataDto>?> GetByIdAsync(int id);
+        Task<ServiceResponse<FileMetadataDto>?> CreateAsync(CreateFileDto dto);
+        Task<ServiceResponse<FileMetadataDto>?> UpdateAsync(int id, UpdateFileDto dto);
+        Task<ServiceResponse<object>?> DeleteAsync(int id);
+        Task<ServiceResponse<string>?> UploadAsync(IFormFile file);
+        Task<ServiceResponse<byte[]>?> DownloadAsync(string fileName);
     }
 }

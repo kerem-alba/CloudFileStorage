@@ -9,5 +9,6 @@ namespace CloudFileStorage.AuthApi.Repositories
         Task AddAsync(User user);
         Task UpdateAsync(User user);
         Task<User?> GetByIdAsync(int id);
+        Task<List<User>> GetAllAsync();
     }
 }

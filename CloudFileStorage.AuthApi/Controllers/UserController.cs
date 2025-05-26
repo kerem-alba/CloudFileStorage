@@ -23,6 +23,13 @@ namespace CloudFileStorage.AuthApi.Controllers
             var response = await _mediator.Send(new GetUserNameByIdQuery(id));
             return this.HandleResponse(response);
         }
+
+        [HttpGet("list")]
+        public async Task<IActionResult> GetUserList()
+        {
+            var response = await _mediator.Send(new GetUserListQuery());
+            return this.HandleResponse(response);
+        }
     }
 
 }

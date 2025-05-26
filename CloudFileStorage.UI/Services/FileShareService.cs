@@ -8,33 +8,33 @@ namespace CloudFileStorage.UI.Services
 {
     public class FileShareService : IFileShareService
     {
-        private readonly ApiRequestHelper _api;
+        private readonly ApiRequestHelper _apiRequestHelper;
 
-        public FileShareService(ApiRequestHelper api)
+        public FileShareService(ApiRequestHelper apiRequestHelper)
         {
-            _api = api;
+            _apiRequestHelper = apiRequestHelper;
         }
 
-        public Task<ServiceResponse<List<FileMetadataDto>>?> GetSharedWithMeAsync(string token)
+        public Task<ServiceResponse<List<FileMetadataDto>>?> GetSharedWithMeAsync()
         {
-            return _api.GetAsync<List<FileMetadataDto>>(ApiEndpoints.FileShares.SharedWithMe, token);
+            return _apiRequestHelper.GetAsync<List<FileMetadataDto>>(ApiEndpoints.FileShares.SharedWithMe);
         }
 
-        public Task<ServiceResponse<bool>?> ShareFileAsync(CreateFileShareMetadataDto dto, string token)
+        public Task<ServiceResponse<bool>?> ShareFileAsync(CreateFileShareMetadataDto dto)
         {
-            return _api.PostAsync<CreateFileShareMetadataDto, bool>(ApiEndpoints.FileShares.ShareFile, dto, token);
+            return _apiRequestHelper.PostAsync<CreateFileShareMetadataDto, bool>(ApiEndpoints.FileShares.ShareFile, dto);
         }
 
-        public Task<ServiceResponse<bool>?> UpdateShareAsync(int id, UpdateFileShareMetadataDto dto, string token)
+        public Task<ServiceResponse<bool>?> UpdateShareAsync(int id, UpdateFileShareMetadataDto dto)
         {
             var url = ApiEndpoints.FileShares.Update.Replace("{id}", id.ToString());
-            return _api.PutAsync<UpdateFileShareMetadataDto, bool>(url, dto, token);
+            return _apiRequestHelper.PutAsync<UpdateFileShareMetadataDto, bool>(url, dto);
         }
 
-        public Task<ServiceResponse<bool>?> DeleteShareAsync(int id, string token)
+        public Task<ServiceResponse<bool>?> DeleteShareAsync(int id)
         {
             var url = ApiEndpoints.FileShares.Delete.Replace("{id}", id.ToString());
-            return _api.DeleteAsync<bool>(url, token);
+            return _apiRequestHelper.DeleteAsync<bool>(url);
         }
     }
 }
