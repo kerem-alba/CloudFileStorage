@@ -1,0 +1,63 @@
+﻿@model CloudFileStorage.UI.Models.DTOs.CreateFileDto
+
+@{
+    ViewData["Title"] = "Yeni Dosya Ekle";
+}
+
+<div class="container mt-5" style="max-width: 600px;">
+    <h2 class="mb-4 text-center">Yeni Dosya Ekle</h2>
+
+    <form asp-action="Create" method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label class="form-label">Dosya Seç</label>
+            <input asp-for="File" type="file" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label">Dosya Adı</label>
+            <input asp-for="Name" class="form-control" placeholder="Dosya adı giriniz" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label">Açıklama</label>
+            <textarea asp-for="Description" class="form-control" rows="3" placeholder="Açıklama giriniz"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="ShareType" class="form-label">Paylaşım Türü</label>
+            <select asp-for="ShareType" class="form-select" id="shareTypeSelect" asp-items="Html.GetEnumSelectList<CloudFileStorage.Common.Enums.ShareType>()">
+            </select>
+        </div>
+
+        <div class="mb-3" id="userIdsContainer" style="display: none;">
+            <label class="form-label">Kullanıcı Seç</label>
+            @await Component.InvokeAsync("UserList")
+        </div>
+
+        <input type="hidden" asp-for="Permission" value="Read" />
+
+        <div class="d-flex justify-content-between mt-3">
+            <a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
+            <button type="submit" class="btn btn-success">Dosyayı Yükle</button>
+        </div>
+
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        const shareSelect = document.getElementById('shareTypeSelect');
+        const userIdsDiv = document.getElementById('userIdsContainer');
+
+        shareSelect.addEventListener('change', () => {
+            userIdsDiv.style.display = shareSelect.value === 'Specific' ? 'block' : 'none';
+        });
+
+        // Sayfa yüklendiğinde tetikle
+        window.addEventListener('DOMContentLoaded', () => {
+            userIdsDiv.style.display = shareSelect.value === 'Specific' ? 'block' : 'none';
+        });
+    </script>
+}

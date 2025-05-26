@@ -1,0 +1,17 @@
+﻿@model List<CloudFileStorage.UI.Models.DTOs.FileMetadataDto>
+
+@{
+    ViewData["Title"] = "Dosyalarım";
+}
+
+<div class="container mt-5">
+    <h2 class="mb-4">Dosyalarım</h2>
+
+    <a asp-action="Create"
+       class="btn btn-success rounded-circle d-flex justify-content-center align-items-center pb-3"
+       style="width: 64px; height: 64px; font-size: 52px">
+        <span>+</span>
+    </a>
+
+    @await Component.InvokeAsync("FileTable", Model)
+</div>

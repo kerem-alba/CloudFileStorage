@@ -1,4 +1,5 @@
-﻿using CloudFileStorage.Common.Extensions;
+﻿using CloudFileStorage.Common.Constants;
+using CloudFileStorage.Common.Extensions;
 using CloudFileStorage.FileStorageApi.CQRS.Commands;
 using CloudFileStorage.FileStorageApi.CQRS.Queries;
 using Microsoft.AspNetCore.Mvc;
@@ -32,7 +33,7 @@ namespace CloudFileStorage.FileStorageApi.Controllers
             if (!response.Success || response.Data == null)
                 return this.HandleResponse(response);
 
-            return File(response.Data, "application/octet-stream", fileName);
+            return File(response.Data, HttpContentTypes.OctetStream, fileName);
         }
     }
 }

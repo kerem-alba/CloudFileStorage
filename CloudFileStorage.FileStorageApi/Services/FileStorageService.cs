@@ -4,11 +4,12 @@ using CloudFileStorage.FileStorageApi.Services;
 
 public class FileStorageService : IFileStorageService
 {
-    private readonly IWebHostEnvironment _env;
+    private readonly IConfiguration _configuration;
 
-    public FileStorageService(IWebHostEnvironment env)
+
+    public FileStorageService(IConfiguration configuration)
     {
-        _env = env;
+        _configuration = configuration;
     }
 
     public async Task<ServiceResponse<string>> UploadFileAsync(IFormFile file)
@@ -25,12 +26,11 @@ public class FileStorageService : IFileStorageService
                 };
             }
 
-            var uploadsPath = Path.Combine(_env.WebRootPath ?? "wwwroot", "uploads");
-            if (!Directory.Exists(uploadsPath))
-                Directory.CreateDirectory(uploadsPath);
+            var uploadsPath = _configuration["UploadFolder"];
+            Directory.CreateDirectory(uploadsPath!);
 
             var uniqueFileName = $"{Guid.NewGuid()}_{file.FileName}";
-            var filePath = Path.Combine(uploadsPath, uniqueFileName);
+            var filePath = Path.Combine(uploadsPath!, uniqueFileName);
 
             using var stream = new FileStream(filePath, FileMode.Create);
             await file.CopyToAsync(stream);
@@ -66,10 +66,10 @@ public class FileStorageService : IFileStorageService
                 };
             }
 
-            var uploadsPath = Path.Combine(_env.WebRootPath ?? "wwwroot", "uploads");
-            var filePath = Path.Combine(uploadsPath, fileName);
+            var uploadsPath = _configuration["UploadFolder"];
+            var filePath = Path.Combine(uploadsPath!, fileName);
 
-            if (!System.IO.File.Exists(filePath))
+            if (!File.Exists(filePath))
             {
                 return new ServiceResponse<byte[]>
                 {
@@ -79,7 +79,7 @@ public class FileStorageService : IFileStorageService
                 };
             }
 
-            var fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
+            var fileBytes = await File.ReadAllBytesAsync(filePath);
 
             return new ServiceResponse<byte[]>
             {

@@ -4,11 +4,9 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Reverse proxy
 builder.Services.AddReverseProxy()
     .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 
-// JWT authentication
 var jwtConfig = builder.Configuration.GetSection("Jwt");
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
