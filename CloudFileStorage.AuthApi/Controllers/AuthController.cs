@@ -32,9 +32,9 @@ namespace CloudFileStorage.AuthApi.Controllers
         }
 
         [HttpPost("refresh")]
-        public async Task<IActionResult> Refresh([FromBody] RefreshTokenDto request)
+        public async Task<IActionResult> Refresh([FromBody] RefreshTokenDto dto)
         {
-            var response = await _mediator.Send(new RefreshTokenCommand(request.RefreshToken));
+            var response = await _mediator.Send(new RefreshTokenCommand(dto.RefreshToken));
             return this.HandleResponse(response);
         }
     }

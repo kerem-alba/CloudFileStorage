@@ -41,7 +41,7 @@ namespace CloudFileStorage.AuthApi.Services
         public (string RefreshToken, DateTime RefreshExpire) GenerateRefreshToken()
         {
             var refreshToken = Guid.NewGuid().ToString();
-            var refreshExpireDate = DateTime.Now.AddDays(7);
+            var refreshExpireDate = DateTime.Now.AddHours(int.Parse(_config["RefreshToken:ExpireHours"]!));
             return (refreshToken, refreshExpireDate);
         }
 

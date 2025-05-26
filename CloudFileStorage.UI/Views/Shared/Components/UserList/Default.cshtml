@@ -1,0 +1,9 @@
+﻿@model List<CloudFileStorage.UI.Models.DTOs.UserDto>
+
+@foreach (var user in Model)
+{
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="UserIds" value="@user.Id" id="user-@user.Id" />
+        <label class="form-check-label" for="user-@user.Id">@user.FullName (@user.Email)</label>
+    </div>
+}

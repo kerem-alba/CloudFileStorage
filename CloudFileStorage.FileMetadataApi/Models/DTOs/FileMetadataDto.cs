@@ -7,5 +7,6 @@
         public string? Description { get; set; }
         public int OwnerId { get; set; }
         public DateTime UploadDate { get; set; }
+        public string FileName { get; set; } = null!;
     }
 }

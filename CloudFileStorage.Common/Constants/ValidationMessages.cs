@@ -15,6 +15,7 @@
 
         public const string FileIdRequired = "Geçerli bir dosya ID girilmelidir.";
         public const string UserIdRequired = "Geçerli bir kullanıcı ID girilmelidir.";
+        public const string UserIdsRequired = "En az bir kullanıcı seçilmelidir.";
         public const string PermissionRequired = "Paylaşım izni boş olamaz.";
         public const string PermissionMaxLength = "İzin en fazla 50 karakter olabilir.";
 

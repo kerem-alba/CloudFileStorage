@@ -1,0 +1,11 @@
+﻿@model string
+
+@if (!string.IsNullOrEmpty(Model))
+{
+    <div class="d-flex align-items-center ms-auto">
+        <span class="me-3 fw-semibold">@Model</span>
+        <form asp-controller="Auth" asp-action="Logout" method="post" class="d-inline">
+            <button type="submit" class="btn btn-outline-danger btn-sm">Logout</button>
+        </form>
+    </div>
+}

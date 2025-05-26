@@ -31,5 +31,16 @@ namespace CloudFileStorage.AuthApi.Repositories
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<User?> GetByIdAsync(int id)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+        }
+
+        public async Task<List<User>> GetAllAsync()
+        {
+            return await _context.Users.ToListAsync();
+        }
+
     }
 }
