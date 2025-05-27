@@ -5,6 +5,7 @@ using CloudFileStorage.FileMetadataApi.Models.DTOs;
 using CloudFileStorage.FileMetadataApi.Models.Entities;
 using CloudFileStorage.FileMetadataApi.Repositories;
 using CloudFileStorage.FileMetadataApi.Services.Interfaces;
+using CloudFileStorage.Common.Enums;
 
 namespace CloudFileStorage.FileMetadataApi.Services
 {
@@ -45,11 +46,11 @@ namespace CloudFileStorage.FileMetadataApi.Services
             }
         }
 
-        public async Task<ServiceResponse<FileMetadata?>> GetFileByIdAsync(int id, int ownerId)
+        public async Task<ServiceResponse<FileMetadata?>> GetFileByIdAsync(int id)
         {
             try
             {
-                var file = await _repository.GetByIdAsync(id, ownerId);
+                var file = await _repository.GetByIdAsync(id);
 
                 if (file == null)
                 {
@@ -84,6 +85,9 @@ namespace CloudFileStorage.FileMetadataApi.Services
                 var file = _mapper.Map<FileMetadata>(dto);
                 file.OwnerId = ownerId;
                 file.UploadDate = DateTime.UtcNow;
+                file.IsPublic = dto.ShareType == ShareType.Public;
+                file.Permission = dto.Permission ?? Permission.Edit;
+
 
                 await _repository.AddAsync(file);
 
@@ -107,7 +111,7 @@ namespace CloudFileStorage.FileMetadataApi.Services
         {
             try
             {
-                var file = await _repository.GetByIdAsync(id, ownerId);
+                var file = await _repository.GetByIdAsync(id);
                 if (file == null)
                 {
                     return new ServiceResponse<string>
@@ -115,6 +119,16 @@ namespace CloudFileStorage.FileMetadataApi.Services
                         Success = false,
                         StatusCode = 404,
                         Message = ResponseMessages.FileNotFound
+                    };
+                }
+
+                if (file.OwnerId != ownerId && (!file.IsPublic || file.Permission != Permission.Edit))
+                {
+                    return new ServiceResponse<string>
+                    {
+                        Success = false,
+                        StatusCode = 403,
+                        Message = ResponseMessages.FileUpdateNotAllowed
                     };
                 }
 
@@ -137,11 +151,11 @@ namespace CloudFileStorage.FileMetadataApi.Services
             }
         }
 
-        public async Task<ServiceResponse<string>> DeleteFileAsync(int id, int ownerId)
+        public async Task<ServiceResponse<string>> DeleteFileAsync(int id)
         {
             try
             {
-                var file = await _repository.GetByIdAsync(id, ownerId);
+                var file = await _repository.GetByIdAsync(id);
                 if (file == null)
                 {
                     return new ServiceResponse<string>
@@ -169,5 +183,65 @@ namespace CloudFileStorage.FileMetadataApi.Services
                 };
             }
         }
+
+        public async Task<ServiceResponse<FileMetadataDto>> GetAccessibleByIdAsync(int fileId, int userId)
+        {
+            try
+            {
+                var file = await _repository.GetByIdAsync(fileId);
+                if (file == null)
+                {
+                    return new ServiceResponse<FileMetadataDto>
+                    {
+                        Success = false,
+                        StatusCode = 404,
+                        Message = ResponseMessages.FileNotFound
+                    };
+                }
+
+                if (file.OwnerId == userId)
+                {
+                    var dto = _mapper.Map<FileMetadataDto>(file);
+                    dto.Permission = Permission.Edit;
+                    return new ServiceResponse<FileMetadataDto>
+                    {
+                        Data = dto,
+                        StatusCode = 200,
+                        Message = ResponseMessages.FileFetched
+                    };
+                }
+
+                if (file.IsPublic)
+                {
+                    var dto = _mapper.Map<FileMetadataDto>(file);
+                    dto.Permission = file.Permission;
+                    return new ServiceResponse<FileMetadataDto>
+                    {
+                        Data = dto,
+                        StatusCode = 200,
+                        Message = ResponseMessages.FileFetched
+                    };
+                }
+
+
+                return new ServiceResponse<FileMetadataDto>
+                {
+                    Success = false,
+                    StatusCode = 403,
+                    Message = ResponseMessages.FileAccessDenied
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ServiceResponse<FileMetadataDto>
+                {
+                    Success = false,
+                    StatusCode = 500,
+                    Message = ex.Message
+                };
+            }
+        }
+
+
     }
 }

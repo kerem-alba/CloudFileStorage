@@ -2,12 +2,9 @@
 
 namespace CloudFileStorage.UI.Models.DTOs
 {
-    public class UpdateFileDto
+    public class ShareModalDto
     {
-        public int Id { get; set; }
-        public string Name { get; set; } = null!;
-        public string? Description { get; set; }
-
+        public int FileMetadataId { get; set; }
         public ShareType ShareType { get; set; } = ShareType.Private;
         public Permission Permission { get; set; } = Permission.ReadOnly;
     }

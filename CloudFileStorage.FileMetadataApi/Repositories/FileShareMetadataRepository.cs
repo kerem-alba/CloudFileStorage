@@ -48,7 +48,10 @@ namespace CloudFileStorage.FileMetadataApi.Repositories
             return true;
         }
 
-
-
+        public async Task<bool> ExistsAsync(int fileMetadataId, int userId)
+        {
+            return await _context.FileShareMetadatas
+                .AnyAsync(f => f.FileMetadataId == fileMetadataId && f.UserId == userId);
+        }
     }
 }

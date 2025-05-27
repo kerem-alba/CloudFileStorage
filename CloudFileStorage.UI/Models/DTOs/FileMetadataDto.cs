@@ -1,4 +1,6 @@
-﻿namespace CloudFileStorage.UI.Models.DTOs
+﻿using CloudFileStorage.Common.Enums;
+
+namespace CloudFileStorage.UI.Models.DTOs
 {
     public class FileMetadataDto
     {
@@ -9,6 +11,8 @@
         public int OwnerId { get; set; }
         public string? OwnerName { get; set; }
         public string FileName { get; set; } = null!;
+        public Permission Permission { get; set; } = Permission.ReadOnly;
+        public ShareType ShareType { get; set; } = ShareType.Private;
 
     }
 }

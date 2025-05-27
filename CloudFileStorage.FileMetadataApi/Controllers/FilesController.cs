@@ -36,6 +36,14 @@ namespace CloudFileStorage.FileMetadataApi.Controllers
             return this.HandleResponse(response);
         }
 
+        [HttpGet("{id}/accessible")]
+        public async Task<IActionResult> GetAccessibleById(int id)
+        {
+            int userId = User.GetUserId();
+            var response = await _mediator.Send(new GetAccessibleFileQuery(id, userId));
+            return this.HandleResponse(response);
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateFile([FromBody] CreateFileDto dto)
         {

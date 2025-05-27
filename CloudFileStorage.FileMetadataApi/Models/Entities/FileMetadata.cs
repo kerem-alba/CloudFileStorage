@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CloudFileStorage.Common.Enums;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -24,7 +25,7 @@ namespace CloudFileStorage.FileMetadataApi.Models.Entities
 
         [Required]
         public DateTime UploadDate { get; set; }
-
         public bool IsPublic { get; set; } = false;
+        public Permission Permission { get; set; } = Permission.Edit;
     }
 }

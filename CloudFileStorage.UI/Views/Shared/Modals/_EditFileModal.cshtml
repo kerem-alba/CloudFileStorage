@@ -20,6 +20,20 @@
                         <textarea asp-for="Description" class="form-control" rows="3"></textarea>
                         <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ShareType" class="form-label">Paylaşım Türü</label>
+                        <select asp-for="ShareType" class="form-select" id="editShareTypeSelect"
+                                asp-items="Html.GetEnumSelectList<CloudFileStorage.Common.Enums.ShareType>()">
+                        </select>
+                    </div>
+
+                    <div class="mb-3" id="editPermissionContainer" style="display: none;">
+                        <label asp-for="Permission" class="form-label">İzin</label>
+                        <select asp-for="Permission" class="form-select"
+                                asp-items="Html.GetEnumSelectList<CloudFileStorage.Common.Enums.Permission>()">
+                        </select>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-success">Kaydet</button>
@@ -29,3 +43,17 @@
         </div>
     </div>
 </div>
+
+<script>
+    const shareSelect = document.getElementById('editShareTypeSelect');
+    const permissionDiv = document.getElementById('editPermissionContainer');
+
+    function togglePermissionEditModal() {
+        permissionDiv.style.display = shareSelect.value === '1' ? 'block' : 'none';
+    }
+
+    if (shareSelect) {
+        shareSelect.addEventListener('change', togglePermissionEditModal);
+        window.addEventListener('DOMContentLoaded', togglePermissionEditModal);
+    }
+</script>
