@@ -1,3 +1,4 @@
+using CloudFileStorage.Common.Enums;
 using CloudFileStorage.UI.Constants;
 using CloudFileStorage.UI.Models.DTOs;
 using CloudFileStorage.UI.Services.Interfaces;
@@ -82,10 +83,11 @@ namespace CloudFileStorage.UI.Controllers
             if (string.IsNullOrEmpty(token))
                 return RedirectToAction("Login", "Auth");
 
-            var result = await _fileService.GetByIdAsync(id);
+            var result = await _fileService.GetAccessibleByIdAsync(id);
             if (result == null || !result.Success || result.Data == null)
             {
-                ViewBag.Error = result?.Message ?? UiMessages.GetFileDetailsFailed;
+                TempData["Message"] = result?.Message ?? UiMessages.GetFileDetailsFailed;
+                TempData["MessageType"] = "danger";
                 return RedirectToAction("Index");
             }
             var file = result.Data;
@@ -118,6 +120,8 @@ namespace CloudFileStorage.UI.Controllers
             }
 
             dto.FileName = uploadResult.Data;
+            if (dto.ShareType == ShareType.Private)
+                dto.Permission = Permission.Edit;
 
             var result = await _fileService.CreateAsync(dto);
 

@@ -27,21 +27,19 @@
 
         <div class="mb-3">
             <label asp-for="ShareType" class="form-label">Paylaşım Türü</label>
-            <select asp-for="ShareType" class="form-select" id="shareTypeSelect" asp-items="Html.GetEnumSelectList<CloudFileStorage.Common.Enums.ShareType>()">
-            </select>
+            <select asp-for="ShareType" class="form-select" id="shareTypeSelect" asp-items="Html.GetEnumSelectList<CloudFileStorage.Common.Enums.ShareType>()"></select>
         </div>
 
-        <div class="mb-3" id="userIdsContainer" style="display: none;">
-            <label class="form-label">Kullanıcı Seç</label>
-            @await Component.InvokeAsync("UserList")
+        <div class="mb-3" id="permissionContainer" style="display: none;">
+            <label asp-for="Permission" class="form-label">İzin</label>
+            <select asp-for="Permission" class="form-select" asp-items="Html.GetEnumSelectList<CloudFileStorage.Common.Enums.Permission>()"></select>
         </div>
-
-        <input type="hidden" asp-for="Permission" value="Read" />
 
         <div class="d-flex justify-content-between mt-3">
             <a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
             <button type="submit" class="btn btn-success">Dosyayı Yükle</button>
         </div>
+
 
     </form>
 </div>
@@ -49,15 +47,15 @@
 @section Scripts {
     <script>
         const shareSelect = document.getElementById('shareTypeSelect');
-        const userIdsDiv = document.getElementById('userIdsContainer');
+        const permissionDiv = document.getElementById('permissionContainer');
 
-        shareSelect.addEventListener('change', () => {
-            userIdsDiv.style.display = shareSelect.value === 'Specific' ? 'block' : 'none';
-        });
+        function togglePermission() {
+            permissionDiv.style.display = shareSelect.value === '1' ? 'block' : 'none';
+        }
 
-        // Sayfa yüklendiğinde tetikle
-        window.addEventListener('DOMContentLoaded', () => {
-            userIdsDiv.style.display = shareSelect.value === 'Specific' ? 'block' : 'none';
-        });
+        shareSelect.addEventListener('change', togglePermission);
+        window.addEventListener('DOMContentLoaded', togglePermission);
     </script>
+
 }
+

@@ -7,7 +7,7 @@ namespace CloudFileStorage.FileMetadataApi.Repositories
     {
         Task AddAsync(FileMetadata file);
         Task<List<FileMetadata>> GetAllByOwnerIdAsync(int ownerId);
-        Task<FileMetadata?> GetByIdAsync(int id, int ownerId);
+        Task<FileMetadata?> GetByIdAsync(int id);
         Task UpdateAsync(FileMetadata file);
         Task DeleteAsync(FileMetadata file);
     }

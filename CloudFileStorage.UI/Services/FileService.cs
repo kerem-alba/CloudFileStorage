@@ -28,6 +28,12 @@ namespace CloudFileStorage.UI.Services
             return _apiRequestHelper.GetAsync<FileMetadataDto>(url);
         }
 
+        public Task<ServiceResponse<FileMetadataDto>?> GetAccessibleByIdAsync(int id)
+        {
+            var url = ApiEndpoints.FileMetadata.GetAccessibleById.Replace("{id}", id.ToString());
+            return _apiRequestHelper.GetAsync<FileMetadataDto>(url);
+        }
+
         public Task<ServiceResponse<FileMetadataDto>?> CreateAsync(CreateFileDto dto)
         {
             return _apiRequestHelper.PostAsync<CreateFileDto, FileMetadataDto>(ApiEndpoints.FileMetadata.Create, dto);

@@ -15,15 +15,16 @@
         public const string UserFetched = "Kullanıcı bilgileri başarıyla getirildi.";
         public const string UsersFetched = "Kullanıcılar başarıyla getirildi.";
 
-
         public const string FileCreated = "Dosya bilgisi başarıyla oluşturuldu.";
         public const string FileUpdated = "Dosya bilgisi başarıyla güncellendi.";
         public const string FileDeleted = "Dosya bilgisi başarıyla silindi.";
         public const string FileNotFound = "Dosya bulunamadı.";
+        public const string FileAccessDenied = "Bu dosyaya erişim yetkiniz yok.";
 
         public const string FileShareFetched = "Paylaşılan dosyalar başarıyla getirildi.";
         public const string NoFilesSharedWithYou = "Size paylaşılan dosya bulunmamaktadır.";
         public const string FilesFetched = "Dosyalar başarıyla getirildi.";
+        public const string FileFetched = "Dosya başarıyla getirildi.";
         public const string NoFilesFound = "Herhangi bir dosya bulunamadı.";
         public const string FileShareCreated = "Dosya paylaşımı başarıyla oluşturuldu.";
         public const string FileShareDeleted = "Dosya paylaşımı başarıyla kaldırıldı.";
@@ -35,6 +36,7 @@
         public const string FileNotSelected = "Dosya seçilmedi.";
         public const string FileUploadSuccess = "Dosya başarıyla yüklendi.";
         public const string FileUploadFail = "Dosya yükleme işlemi sırasında bir hata oluştu: {0}";
+        public const string FileUpdateNotAllowed = "Bu dosyayı düzenleme yetkiniz yok.";
 
         public const string FileNameRequired = "Dosya adı zorunludur.";
         public const string FileDownloadSuccess = "Dosya başarıyla indirildi.";

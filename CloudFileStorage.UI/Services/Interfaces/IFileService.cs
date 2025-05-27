@@ -7,6 +7,7 @@ namespace CloudFileStorage.UI.Services.Interfaces
     {
         Task<ServiceResponse<List<FileMetadataDto>>?> GetAllAsync();
         Task<ServiceResponse<FileMetadataDto>?> GetByIdAsync(int id);
+        Task<ServiceResponse<FileMetadataDto>?> GetAccessibleByIdAsync(int id);
         Task<ServiceResponse<FileMetadataDto>?> CreateAsync(CreateFileDto dto);
         Task<ServiceResponse<FileMetadataDto>?> UpdateAsync(int id, UpdateFileDto dto);
         Task<ServiceResponse<object>?> DeleteAsync(int id);

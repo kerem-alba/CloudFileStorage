@@ -12,6 +12,5 @@ public class CreateFileDto
     public string FileName { get; set; } = null!;
 
     public ShareType ShareType { get; set; } = ShareType.Private;
-    public List<int>? UserIds { get; set; }
-    public string Permission { get; set; } = "Read";
+    public Permission? Permission { get; set; }
 }

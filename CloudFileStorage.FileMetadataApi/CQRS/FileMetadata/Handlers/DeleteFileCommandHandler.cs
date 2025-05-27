@@ -16,7 +16,7 @@ namespace CloudFileStorage.FileMetadataApi.CQRS.FileMetadata.Handlers
 
         public async Task<ServiceResponse<string>> Handle(DeleteFileCommand request, CancellationToken cancellationToken)
         {
-            return await _fileService.DeleteFileAsync(request.Id, request.OwnerId);
+            return await _fileService.DeleteFileAsync(request.Id);
         }
     }
 }

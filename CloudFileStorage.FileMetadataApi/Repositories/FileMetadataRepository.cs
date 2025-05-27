@@ -21,11 +21,12 @@ namespace CloudFileStorage.FileMetadataApi.Repositories
                 .ToListAsync();
         }
 
-        public async Task<FileMetadata?> GetByIdAsync(int id, int ownerId)
+        public async Task<FileMetadata?> GetByIdAsync(int id)
         {
             return await _context.Files
-                .FirstOrDefaultAsync(f => f.Id == id && f.OwnerId == ownerId);
+                .FirstOrDefaultAsync(f => f.Id == id);
         }
+
         public async Task AddAsync(FileMetadata file)
         {
             await _context.Files.AddAsync(file);

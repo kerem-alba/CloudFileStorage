@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace CloudFileStorage.Common.Enums
 {
     public enum Permission
     {
-        Okuma,
-        Düzenleme,
+        [Display(Name = "Sadece Okuma")]
+        ReadOnly,
+
+        [Display(Name = "Düzenleme")]
+        Edit
     }
 }

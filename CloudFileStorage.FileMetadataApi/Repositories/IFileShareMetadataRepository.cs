@@ -8,6 +8,7 @@ namespace CloudFileStorage.FileMetadataApi.Repositories.Interfaces
         Task AddAsync(FileShareMetadata entity);
         Task<bool> DeleteAsync(int id);
         Task<bool> UpdateAsync(int id, string newPermission);
+        Task<bool> ExistsAsync(int fileMetadataId, int userId);
 
     }
 }

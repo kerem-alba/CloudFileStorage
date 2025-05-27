@@ -20,7 +20,7 @@ namespace CloudFileStorage.FileMetadataApi.CQRS.FileMetadata.Handlers
 
         public async Task<ServiceResponse<FileMetadataDto?>> Handle(GetFileByIdQuery request, CancellationToken cancellationToken)
         {
-            var response = await _fileService.GetFileByIdAsync(request.Id, request.OwnerId);
+            var response = await _fileService.GetFileByIdAsync(request.Id);
             var fileDto = response.Data == null ? null : _mapper.Map<FileMetadataDto>(response.Data);
 
             return new ServiceResponse<FileMetadataDto?>
