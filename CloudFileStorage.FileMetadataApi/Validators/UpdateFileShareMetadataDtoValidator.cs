@@ -10,7 +10,7 @@ namespace CloudFileStorage.FileMetadataApi.Validators
         {
             RuleFor(x => x.Permission)
                 .NotEmpty().WithMessage(ValidationMessages.PermissionRequired)
-                .MaximumLength(50).WithMessage(ValidationMessages.PermissionMaxLength);
+                .NotNull().WithMessage(ValidationMessages.PermissionMaxLength);
         }
     }
 }

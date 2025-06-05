@@ -76,7 +76,7 @@ builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddValidatorsFromAssemblyContaining<CreateFileDtoValidator>();
 
 builder.Services.AddScoped<IFileMetadataRepository, FileMetadataRepository>();
-builder.Services.AddScoped<IFileMetadataService, FilemetadataService>();
+builder.Services.AddScoped<IFileMetadataService, FileMetadataService>();
 builder.Services.AddScoped<IFileShareMetadataService, FileShareMetadataService>();
 builder.Services.AddScoped<IFileShareMetadataRepository, FileShareMetadataRepository>();
 

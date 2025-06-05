@@ -20,21 +20,46 @@ namespace CloudFileStorage.UI.Services
             return _apiRequestHelper.GetAsync<List<FileMetadataDto>>(ApiEndpoints.FileShares.SharedWithMe);
         }
 
-        public Task<ServiceResponse<bool>?> ShareFileAsync(CreateFileShareMetadataDto dto)
+        private Task<ServiceResponse<string>?> ShareFileAsync(CreateFileShareMetadataDto dto)
         {
-            return _apiRequestHelper.PostAsync<CreateFileShareMetadataDto, bool>(ApiEndpoints.FileShares.ShareFile, dto);
+            var result = _apiRequestHelper.PostAsync<CreateFileShareMetadataDto, string>(ApiEndpoints.FileShares.ShareFile, dto);
+            return result;
         }
 
-        public Task<ServiceResponse<bool>?> UpdateShareAsync(int id, UpdateFileShareMetadataDto dto)
+        public async Task<ServiceResponse<bool>?> ShareFileWithMultipleUsersAsync(int fileMetadataId, List<UserShareSelection> selectedUsers)
         {
-            var url = ApiEndpoints.FileShares.Update.Replace("{id}", id.ToString());
-            return _apiRequestHelper.PutAsync<UpdateFileShareMetadataDto, bool>(url, dto);
-        }
+            selectedUsers = selectedUsers
+                .Where(u => u.UserId > 0)
+                .ToList();
 
-        public Task<ServiceResponse<bool>?> DeleteShareAsync(int id)
-        {
-            var url = ApiEndpoints.FileShares.Delete.Replace("{id}", id.ToString());
-            return _apiRequestHelper.DeleteAsync<bool>(url);
+            foreach (var userSelection in selectedUsers)
+            {
+                var dto = new CreateFileShareMetadataDto
+                {
+                    FileMetadataId = fileMetadataId,
+                    UserId = userSelection.UserId,
+                    Permission = userSelection.Permission
+                };
+
+                var result = await ShareFileAsync(dto);
+
+                if (result == null || !result.Success)
+                {
+                    return new ServiceResponse<bool>
+                    {
+                        Success = false,
+                        Message = result?.Message ?? "File share failed",
+                        StatusCode = result?.StatusCode ?? 500
+                    };
+                }
+            }
+
+            return new ServiceResponse<bool>
+            {
+                Success = true,
+                Data = true,
+                Message = "File shared successfully with all selected users"
+            };
         }
     }
 }

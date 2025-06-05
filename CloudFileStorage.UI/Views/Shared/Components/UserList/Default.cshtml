@@ -1,9 +1,43 @@
 ﻿@model List<CloudFileStorage.UI.Models.DTOs.UserDto>
+@using System.Linq;
 
-@foreach (var user in Model)
-{
-    <div class="form-check">
-        <input class="form-check-input" type="checkbox" name="UserIds" value="@user.Id" id="user-@user.Id" />
-        <label class="form-check-label" for="user-@user.Id">@user.FullName (@user.Email)</label>
-    </div>
+@{
+    var permissionOptions = new List<SelectListItem>
+    {
+        new SelectListItem { Value = "0", Text = "Sadece Okuma" },
+        new SelectListItem { Value = "1", Text = "Düzenleme" }
+    };
 }
+
+<div id="user-share-list">
+    @if (Model != null && Model.Any())
+    {
+        @foreach (var user in Model)
+        {
+            <div class="row mb-2 user-row">
+                <div class="col-auto">
+                    <input class="form-check-input" type="checkbox"
+                           value="@user.Id"
+                           id="user-@user.Id" />
+                </div>
+                <div class="col">
+                    <label class="form-check-label" for="user-@user.Id">
+                        @user.Email
+                    </label>
+                </div>
+                <div class="col">
+                    <select class="form-select permission-select">
+                        @foreach (var option in permissionOptions)
+                        {
+                            <option value="@option.Value">@option.Text</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="alert alert-info">Paylaşılacak kullanıcı bulunamadı.</div>
+    }
+</div>

@@ -34,6 +34,10 @@
                                 asp-items="Html.GetEnumSelectList<CloudFileStorage.Common.Enums.Permission>()">
                         </select>
                     </div>
+                    <div class="mb-3" id="specificUserListContainer" style="display: none;">
+                        @await Component.InvokeAsync("UserList", new { fileMetadataId = Model.Id })
+                    </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-success">Kaydet</button>
@@ -49,8 +53,11 @@
     const permissionDiv = document.getElementById('editPermissionContainer');
 
     function togglePermissionEditModal() {
-        permissionDiv.style.display = shareSelect.value === '1' ? 'block' : 'none';
+        const value = shareSelect.value;
+        permissionDiv.style.display = value === '1' ? 'block' : 'none'; 
+        document.getElementById('specificUserListContainer').style.display = value === '2' ? 'block' : 'none'; 
     }
+
 
     if (shareSelect) {
         shareSelect.addEventListener('change', togglePermissionEditModal);

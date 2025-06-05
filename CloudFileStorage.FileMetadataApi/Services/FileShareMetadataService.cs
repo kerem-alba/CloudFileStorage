@@ -49,23 +49,20 @@ namespace CloudFileStorage.FileMetadataApi.Services
         {
             try
             {
-                var entities = dto.UserIds.Select(userId => new FileShareMetadata
+                var entity = new FileShareMetadata
                 {
                     FileMetadataId = dto.FileMetadataId,
-                    UserId = userId,
+                    UserId = dto.UserId,
                     Permission = dto.Permission
-                }).ToList();
+                };
 
-                foreach (var entity in entities)
-                {
-                    await _repository.AddAsync(entity);
-                }
+                await _repository.AddAsync(entity);
 
                 return new ServiceResponse<string>
                 {
                     Success = true,
-                    Message = ResponseMessages.FileShareCreated,
-                    StatusCode = 201
+                    StatusCode = 201,
+                    Message = ResponseMessages.FileShareCreated
                 };
             }
             catch (Exception ex)
@@ -78,6 +75,7 @@ namespace CloudFileStorage.FileMetadataApi.Services
                 };
             }
         }
+
 
 
         public async Task<ServiceResponse<string>> UpdateAsync(int id, UpdateFileShareMetadataDto dto)

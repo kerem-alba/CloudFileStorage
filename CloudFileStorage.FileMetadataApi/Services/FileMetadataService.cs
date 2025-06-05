@@ -9,12 +9,12 @@ using CloudFileStorage.Common.Enums;
 
 namespace CloudFileStorage.FileMetadataApi.Services
 {
-    public class FilemetadataService : IFileMetadataService
+    public class FileMetadataService : IFileMetadataService
     {
         private readonly IFileMetadataRepository _repository;
         private readonly IMapper _mapper;
 
-        public FilemetadataService(IFileMetadataRepository repository, IMapper mapper)
+        public FileMetadataService(IFileMetadataRepository repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
@@ -78,7 +78,7 @@ namespace CloudFileStorage.FileMetadataApi.Services
             }
         }
 
-        public async Task<ServiceResponse<string>> CreateFileAsync(CreateFileDto dto, int ownerId)
+        public async Task<ServiceResponse<FileMetadataDto>> CreateFileAsync(CreateFileDto dto, int ownerId)
         {
             try
             {
@@ -91,14 +91,18 @@ namespace CloudFileStorage.FileMetadataApi.Services
 
                 await _repository.AddAsync(file);
 
-                return new ServiceResponse<string>
+                var fileDto = _mapper.Map<FileMetadataDto>(file);
+
+                return new ServiceResponse<FileMetadataDto>
                 {
+                    Success = true,
+                    Data = fileDto,
                     Message = ResponseMessages.FileCreated
                 };
             }
             catch (Exception ex)
             {
-                return new ServiceResponse<string>
+                return new ServiceResponse<FileMetadataDto>
                 {
                     Success = false,
                     StatusCode = 500,

@@ -1,6 +1,8 @@
 ﻿using CloudFileStorage.UI.Services.Interfaces;
 using CloudFileStorage.UI.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CloudFileStorage.UI.ViewComponents
 {
@@ -13,10 +15,17 @@ namespace CloudFileStorage.UI.ViewComponents
             _userService = userService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync()
+        public async Task<IViewComponentResult> InvokeAsync(int? fileMetadataId = null)
         {
             var result = await _userService.GetAllUsersAsync();
-            var users = result.Success && result.Data != null ? result.Data : new List<UserDto>();
+            var users = result?.Success == true && result.Data != null ? result.Data : new List<UserDto>();
+
+            Console.WriteLine($"UserList: Found {users.Count} users");
+
+            if (fileMetadataId.HasValue)
+            {
+                ViewBag.FileMetadataId = fileMetadataId.Value;
+            }
 
             return View(users);
         }

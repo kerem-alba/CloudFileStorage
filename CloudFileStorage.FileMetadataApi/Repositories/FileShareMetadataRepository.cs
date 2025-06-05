@@ -1,4 +1,5 @@
-﻿using CloudFileStorage.FileMetadataApi.Contexts;
+﻿using CloudFileStorage.Common.Enums;
+using CloudFileStorage.FileMetadataApi.Contexts;
 using CloudFileStorage.FileMetadataApi.Models.Entities;
 using CloudFileStorage.FileMetadataApi.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -28,7 +29,7 @@ namespace CloudFileStorage.FileMetadataApi.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> UpdateAsync(int id, string newPermission)
+        public async Task<bool> UpdateAsync(int id, Permission newPermission)
         {
             var entity = await _context.FileShareMetadatas.FindAsync(id);
             if (entity == null) return false;

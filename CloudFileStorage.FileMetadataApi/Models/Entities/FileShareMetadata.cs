@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CloudFileStorage.Common.Enums;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CloudFileStorage.FileMetadataApi.Models.Entities
@@ -15,7 +16,7 @@ namespace CloudFileStorage.FileMetadataApi.Models.Entities
         public int UserId { get; set; }
 
         [Required]
-        public string Permission { get; set; } = null!;
+        public Permission Permission { get; set; }
 
         [ForeignKey("FileMetadataId")]
         public FileMetadata FileMetadata { get; set; } = null!;
