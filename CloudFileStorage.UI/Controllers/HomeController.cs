@@ -55,26 +55,26 @@ namespace CloudFileStorage.UI.Controllers
             return View(result.Data);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Share(CreateFileShareMetadataDto dto)
-        {
-            var token = HttpContext.Session.GetString("token");
-            if (string.IsNullOrEmpty(token))
-                return RedirectToAction("Login", "Auth");
+        //[HttpPost]
+        //public async Task<IActionResult> Share(CreateFileShareMetadataDto dto)
+        //{
+        //    var token = HttpContext.Session.GetString("token");
+        //    if (string.IsNullOrEmpty(token))
+        //        return RedirectToAction("Login", "Auth");
 
-            var result = await _fileShareService.ShareFileAsync(dto);
+        //    var result = await _fileShareService.ShareFileAsync(dto);
 
-            if (result == null || !result.Success)
-            {
-                TempData["Error"] = result?.Message ?? UiMessages.FileShareFailed;
-            }
-            else
-            {
-                TempData["Success"] = UiMessages.FileShareSuccess;
-            }
+        //    if (result == null || !result.Success)
+        //    {
+        //        TempData["Error"] = result?.Message ?? UiMessages.FileShareFailed;
+        //    }
+        //    else
+        //    {
+        //        TempData["Success"] = UiMessages.FileShareSuccess;
+        //    }
 
-            return RedirectToAction("Index");
-        }
+        //    return RedirectToAction("Index");
+        //}
 
         [HttpGet]
         public async Task<IActionResult> Detail(int id)
@@ -99,9 +99,18 @@ namespace CloudFileStorage.UI.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            var token = HttpContext.Session.GetString("token");
+            if (string.IsNullOrEmpty(token))
+                return RedirectToAction("Login", "Auth");
+
+            var dto = new CreateFileDto
+            {
+                UserList = (await _userService.GetAllUsersAsync()).Data ?? new List<UserDto>()
+            };
+
+            return View(dto);
         }
 
         [HttpPost]
@@ -115,6 +124,7 @@ namespace CloudFileStorage.UI.Controllers
 
             if (uploadResult == null || !uploadResult.Success || string.IsNullOrEmpty(uploadResult.Data))
             {
+                dto.UserList = (await _userService.GetAllUsersAsync()).Data ?? [];
                 ViewBag.Error = uploadResult?.Message ?? UiMessages.FileUploadFailed;
                 return View(dto);
             }
@@ -127,10 +137,23 @@ namespace CloudFileStorage.UI.Controllers
 
             if (result == null || !result.Success)
             {
+                dto.UserList = (await _userService.GetAllUsersAsync()).Data ?? [];
                 ViewBag.Error = result?.Message ?? UiMessages.FileCreateFailed;
                 return View(dto);
             }
 
+            if (result.Data != null && result.Success && dto.ShareType == ShareType.Specific && dto.SelectedUsers.Count > 0)
+            {
+                var fileMetadataId = result.Data.Id;
+                var shareResult = await _fileShareService.ShareFileWithMultipleUsersAsync(fileMetadataId, dto.SelectedUsers);
+
+                if (shareResult == null || !shareResult.Success)
+                {
+                    TempData["Warning"] = shareResult?.Message ?? UiMessages.FileShareFailed;
+                }
+            }
+
+            TempData["Success"] = UiMessages.FileCreateSuccess;
             return RedirectToAction("Index");
         }
 

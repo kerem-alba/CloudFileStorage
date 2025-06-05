@@ -1,46 +1,88 @@
 ﻿@model CloudFileStorage.UI.Models.DTOs.CreateFileDto
+@using CloudFileStorage.Common.Enums
 
 @{
-    ViewData["Title"] = "Yeni Dosya Ekle";
+    ViewData["Title"] = "Dosya Oluştur";
+    var permissionOptions = new List<SelectListItem>
+    {
+        new SelectListItem { Value = ((int)Permission.ReadOnly).ToString(), Text = "Sadece Okuma" },
+        new SelectListItem { Value = ((int)Permission.Edit).ToString(), Text = "Düzenleme" }
+    };
 }
 
-<div class="container mt-5" style="max-width: 600px;">
-    <h2 class="mb-4 text-center">Yeni Dosya Ekle</h2>
+<div class="container">
+    <h2>Yeni Dosya Oluştur</h2>
 
-    <form asp-action="Create" method="post" enctype="multipart/form-data">
-        <div class="mb-3">
-            <label class="form-label">Dosya Seç</label>
-            <input asp-for="File" type="file" class="form-control" required />
-        </div>
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">@ViewBag.Error</div>
+    }
 
+    <form method="post" enctype="multipart/form-data">
         <div class="mb-3">
             <label asp-for="Name" class="form-label">Dosya Adı</label>
-            <input asp-for="Name" class="form-control" placeholder="Dosya adı giriniz" />
-            <span asp-validation-for="Name" class="text-danger"></span>
+            <input asp-for="Name" class="form-control" required />
         </div>
 
         <div class="mb-3">
             <label asp-for="Description" class="form-label">Açıklama</label>
-            <textarea asp-for="Description" class="form-control" rows="3" placeholder="Açıklama giriniz"></textarea>
-            <span asp-validation-for="Description" class="text-danger"></span>
+            <textarea asp-for="Description" class="form-control"></textarea>
         </div>
 
         <div class="mb-3">
-            <label asp-for="ShareType" class="form-label">Paylaşım Türü</label>
-            <select asp-for="ShareType" class="form-select" id="shareTypeSelect" asp-items="Html.GetEnumSelectList<CloudFileStorage.Common.Enums.ShareType>()"></select>
+            <label asp-for="File" class="form-label">Dosya</label>
+            <input asp-for="File" class="form-control" type="file" required />
         </div>
 
-        <div class="mb-3" id="permissionContainer" style="display: none;">
-            <label asp-for="Permission" class="form-label">İzin</label>
-            <select asp-for="Permission" class="form-select" asp-items="Html.GetEnumSelectList<CloudFileStorage.Common.Enums.Permission>()"></select>
+        <div class="mb-3">
+            <label asp-for="ShareType" class="form-label">Paylaşım Tipi</label>
+            <select asp-for="ShareType" class="form-select" id="shareTypeSelect">
+                <option value="0">Özel</option>
+                <option value="1">Herkese Açık</option>
+                <option value="2">Belirli Kullanıcılar</option>
+            </select>
         </div>
 
-        <div class="d-flex justify-content-between mt-3">
-            <a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
-            <button type="submit" class="btn btn-success">Dosyayı Yükle</button>
+        <div class="mb-3" id="permissionContainer" style="display:none;">
+            <label asp-for="Permission" class="form-label">Genel İzin</label>
+            <select asp-for="Permission" class="form-select">
+                <option value="0">Sadece Okuma</option>
+                <option value="1">Düzenleme</option>
+            </select>
         </div>
 
+        <div class="mb-3" id="specificUserListContainer" style="display:none;">
+            <label class="form-label">Belirli Kullanıcılar</label>
+            @for (int i = 0; i < Model.UserList.Count; i++)
+            {
+                var user = Model.UserList[i];
+                <div class="row mb-2">
+                    <div class="col-auto">
+                        <input class="form-check-input"
+                               type="checkbox"
+                               name="SelectedUsers[@i].UserId"
+                               value="@user.Id"
+                               id="user-@user.Id" />
+                    </div>
+                    <div class="col">
+                        <label class="form-check-label" for="user-@user.Id">
+                            @user.Email
+                        </label>
+                    </div>
+                    <div class="col">
+                        <select class="form-select"
+                                name="SelectedUsers[@i].Permission">
+                            @foreach (var option in permissionOptions)
+                            {
+                                <option value="@option.Value">@option.Text</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            }
+        </div>
 
+        <button type="submit" class="btn btn-primary">Oluştur</button>
     </form>
 </div>
 
@@ -48,14 +90,15 @@
     <script>
         const shareSelect = document.getElementById('shareTypeSelect');
         const permissionDiv = document.getElementById('permissionContainer');
+        const specificDiv = document.getElementById('specificUserListContainer');
 
-        function togglePermission() {
-            permissionDiv.style.display = shareSelect.value === '1' ? 'block' : 'none';
+        function toggleSections() {
+            const value = shareSelect.value;
+            permissionDiv.style.display = value === '1' ? 'block' : 'none';
+            specificDiv.style.display = value === '2' ? 'block' : 'none';
         }
 
-        shareSelect.addEventListener('change', togglePermission);
-        window.addEventListener('DOMContentLoaded', togglePermission);
+        document.addEventListener('DOMContentLoaded', toggleSections);
+        shareSelect.addEventListener('change', toggleSections);
     </script>
-
 }
-

@@ -12,7 +12,6 @@ builder.Services.AddSession();
 builder.Services.AddHttpContextAccessor();
 
 
-// Auth servislerini ekle
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IFileShareService, FileShareService>();
@@ -38,7 +37,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseSession(); // Session middleware buraya
+app.UseSession();
 app.UseAuthorization();
 
 app.MapControllerRoute(

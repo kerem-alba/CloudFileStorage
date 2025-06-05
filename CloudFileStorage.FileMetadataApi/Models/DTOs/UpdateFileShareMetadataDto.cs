@@ -1,7 +1,9 @@
-﻿namespace CloudFileStorage.FileMetadataApi.Models.DTOs
+﻿using CloudFileStorage.Common.Enums;
+
+namespace CloudFileStorage.FileMetadataApi.Models.DTOs
 {
     public class UpdateFileShareMetadataDto
     {
-        public string Permission { get; set; } = null!;
+        public Permission Permission { get; set; }
     }
 }

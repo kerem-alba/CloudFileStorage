@@ -1,4 +1,5 @@
-﻿using CloudFileStorage.FileMetadataApi.Models.Entities;
+﻿using CloudFileStorage.Common.Enums;
+using CloudFileStorage.FileMetadataApi.Models.Entities;
 
 namespace CloudFileStorage.FileMetadataApi.Repositories.Interfaces
 {
@@ -7,7 +8,7 @@ namespace CloudFileStorage.FileMetadataApi.Repositories.Interfaces
         Task<List<int>> GetFileIdsSharedWithUserAsync(int userId);
         Task AddAsync(FileShareMetadata entity);
         Task<bool> DeleteAsync(int id);
-        Task<bool> UpdateAsync(int id, string newPermission);
+        Task<bool> UpdateAsync(int id, Permission newPermission);
         Task<bool> ExistsAsync(int fileMetadataId, int userId);
 
     }

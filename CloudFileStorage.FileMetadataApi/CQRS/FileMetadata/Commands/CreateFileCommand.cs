@@ -4,5 +4,5 @@ using CloudFileStorage.Common.Models;
 
 namespace CloudFileStorage.FileMetadataApi.CQRS.FileMetadata.Commands
 {
-    public record CreateFileCommand(CreateFileDto Dto, int OwnerId) : IRequest<ServiceResponse<string>>;
+    public record CreateFileCommand(CreateFileDto Dto, int OwnerId) : IRequest<ServiceResponse<FileMetadataDto>>;
 }

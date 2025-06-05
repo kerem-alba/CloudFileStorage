@@ -71,9 +71,8 @@ namespace CloudFileStorage.FileMetadataApi.Migrations
                     b.Property<int>("FileMetadataId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Permission")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("Permission")
+                        .HasColumnType("integer");
 
                     b.Property<int>("UserId")
                         .HasColumnType("integer");

@@ -1,9 +1,11 @@
-﻿namespace CloudFileStorage.UI.Models.DTOs
+﻿using CloudFileStorage.Common.Enums;
+
+namespace CloudFileStorage.UI.Models.DTOs
 {
     public class CreateFileShareMetadataDto
     {
         public int FileMetadataId { get; set; }
         public int UserId { get; set; }
-        public string Permission { get; set; } = null!;
+        public Permission Permission { get; set; }
     }
 }

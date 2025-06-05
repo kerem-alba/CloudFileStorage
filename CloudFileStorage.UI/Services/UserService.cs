@@ -14,7 +14,7 @@ public class UserService : IUserService
 
     public Task<ServiceResponse<List<UserDto>>> GetAllUsersAsync()
     {
-        return _apiRequestHelper.GetAsync<List<UserDto>>(ApiEndpoints.Auth.GetAllUsers);
+        return _apiRequestHelper.GetAsync<List<UserDto>>(ApiEndpoints.Auth.GetUserList);
     }
 
     public Task<ServiceResponse<string>> GetUserNameByIdAsync(int id)
