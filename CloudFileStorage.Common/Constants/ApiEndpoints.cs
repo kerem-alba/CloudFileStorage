@@ -34,6 +34,7 @@
             public const string ShareFile = $"{Base}";
             public const string Update = $"{Base}/{{id}}";
             public const string Delete = $"{Base}/{{id}}";
+            public const string CheckAccess = $"{Base}/check-access";
         }
 
         public static class FileStorage

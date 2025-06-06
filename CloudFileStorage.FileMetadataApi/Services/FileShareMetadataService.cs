@@ -19,30 +19,52 @@ namespace CloudFileStorage.FileMetadataApi.Services
             _repository = repository;
         }
 
-        public async Task<ServiceResponse<List<int>>> GetFilesSharedWithUserAsync(int userId)
+        public async Task<ServiceResponse<List<FileMetadataDto>>> GetFilesSharedWithUserAsync(int userId)
         {
             try
             {
-                var fileIds = await _repository.GetFileIdsSharedWithUserAsync(userId);
+                var files = await _repository.GetSharedFileMetadataListAsync(userId);
 
-                return new ServiceResponse<List<int>>
+                return new ServiceResponse<List<FileMetadataDto>>
                 {
-                    Data = fileIds,
+                    Data = files,
                     StatusCode = 200,
-                    Message = fileIds.Any()
+                    Message = files.Any()
                         ? ResponseMessages.FileShareFetched
                         : ResponseMessages.NoFilesSharedWithYou
                 };
             }
             catch (Exception ex)
             {
-                return new ServiceResponse<List<int>>
+                return new ServiceResponse<List<FileMetadataDto>>
                 {
                     Success = false,
                     StatusCode = 500,
                     Message = ex.Message
                 };
             }
+        }
+
+
+        public async Task<HasAccessResultDto> GetAccessInfoAsync(int userId, int fileMetadataId)
+        {
+            var ownerId = await _repository.GetFileOwnerIdAsync(fileMetadataId);
+            if (ownerId == userId)
+            {
+                return new HasAccessResultDto
+                {
+                    HasAccess = true,
+                    Permission = "Edit"
+                };
+            }
+
+            var entity = await _repository.GetAsync(userId, fileMetadataId);
+
+            return new HasAccessResultDto
+            {
+                HasAccess = entity != null,
+                Permission = entity?.Permission.ToString()
+            };
         }
 
         public async Task<ServiceResponse<string>> CreateAsync(CreateFileShareMetadataDto dto)

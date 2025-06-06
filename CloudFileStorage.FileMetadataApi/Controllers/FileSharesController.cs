@@ -28,6 +28,13 @@ namespace CloudFileStorage.FileMetadataApi.Controllers
             return this.HandleResponse(response);
         }
 
+        [HttpGet("check-access")]
+        public async Task<IActionResult> CheckAccess([FromQuery] int userId, [FromQuery] int fileMetadataId)
+        {
+            var response = await _mediator.Send(new CheckAccessQuery(userId, fileMetadataId));
+            return this.HandleResponse(response);
+        }
+
         [HttpPost]
         public async Task<IActionResult> ShareFile([FromBody] CreateFileShareMetadataDto dto)
         {

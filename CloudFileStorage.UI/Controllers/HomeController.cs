@@ -216,13 +216,14 @@ namespace CloudFileStorage.UI.Controllers
             return RedirectToAction("Index");
         }
 
-        public async Task<IActionResult> Download(string fileName)
+        [HttpGet("download")]
+        public async Task<IActionResult> Download([FromQuery] int fileId, [FromQuery] string fileName)
         {
             var token = HttpContext.Session.GetString("token");
             if (string.IsNullOrEmpty(token))
                 return RedirectToAction("Login", "Auth");
 
-            var result = await _fileService.DownloadAsync(fileName);
+            var result = await _fileService.DownloadAsync(fileId, fileName);
 
             if (result == null || !result.Success || result.Data == null)
             {

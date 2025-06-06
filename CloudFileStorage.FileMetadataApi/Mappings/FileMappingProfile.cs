@@ -12,9 +12,6 @@ namespace CloudFileStorage.FileMetadataApi.Mappings
             CreateMap<UpdateFileDto, FileMetadata>();
             CreateMap<CreateFileShareMetadataDto, FileShareMetadata>();
             CreateMap<FileMetadata, FileMetadataDto>();
-            CreateMap<UpdateFileDto, FileMetadata>();
-
-
         }
     }
 }
