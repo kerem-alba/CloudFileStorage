@@ -18,7 +18,7 @@
     </ul>
 
     <div class="text-center mb-4">
-        <a asp-action="Download" asp-route-fileName="@Model.FileName" class="btn btn-outline-primary rounded-circle" style="width: 70px; height: 70px;" title="Dosyayı İndir">
+        <a asp-action="Download" asp-route-fileId="@Model.Id" asp-route-fileName="@Model.FileName" class="btn btn-outline-primary rounded-circle" style="width: 70px; height: 70px;" title="Dosyayı İndir">
             <i class="bi bi-download fs-2"></i>
         </a>
     </div>

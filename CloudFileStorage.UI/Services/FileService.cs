@@ -56,14 +56,12 @@ namespace CloudFileStorage.UI.Services
             return _fileRequestHelper.PostFileAsync<string>(ApiEndpoints.FileStorage.Upload, file);
         }
 
-        public Task<ServiceResponse<byte[]>?> DownloadAsync(string fileName)
+        public Task<ServiceResponse<byte[]>?> DownloadAsync(int fileId, string fileName)
         {
             var encodedFileName = Uri.EscapeDataString(fileName);
-            var url = ApiEndpoints.FileStorage.Download + $"?fileName={encodedFileName}";
+            var url = $"{ApiEndpoints.FileStorage.Download}?fileId={fileId}&fileName={encodedFileName}";
             return _fileRequestHelper.GetFileAsync(url);
         }
-
-
 
     }
 }

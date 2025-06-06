@@ -2,10 +2,11 @@
 using CloudFileStorage.FileMetadataApi.CQRS.FileShareMetadata.Queries;
 using CloudFileStorage.Common.Models;
 using CloudFileStorage.FileMetadataApi.Services.Interfaces;
+using CloudFileStorage.FileMetadataApi.Models.DTOs;
 
 namespace CloudFileStorage.FileMetadataApi.CQRS.FileShareMetadata.Handlers
 {
-    public class GetFilesSharedWithUserQueryHandler : IRequestHandler<GetFilesSharedWithUserQuery, ServiceResponse<List<int>>>
+    public class GetFilesSharedWithUserQueryHandler : IRequestHandler<GetFilesSharedWithUserQuery, ServiceResponse<List<FileMetadataDto>>>
     {
         private readonly IFileShareMetadataService _service;
 
@@ -14,9 +15,10 @@ namespace CloudFileStorage.FileMetadataApi.CQRS.FileShareMetadata.Handlers
             _service = service;
         }
 
-        public async Task<ServiceResponse<List<int>>> Handle(GetFilesSharedWithUserQuery request, CancellationToken cancellationToken)
+        public async Task<ServiceResponse<List<FileMetadataDto>>> Handle(GetFilesSharedWithUserQuery request, CancellationToken cancellationToken)
         {
             return await _service.GetFilesSharedWithUserAsync(request.UserId);
         }
     }
+
 }

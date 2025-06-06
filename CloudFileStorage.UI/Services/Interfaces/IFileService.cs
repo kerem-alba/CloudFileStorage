@@ -12,6 +12,6 @@ namespace CloudFileStorage.UI.Services.Interfaces
         Task<ServiceResponse<FileMetadataDto>?> UpdateAsync(int id, UpdateFileDto dto);
         Task<ServiceResponse<object>?> DeleteAsync(int id);
         Task<ServiceResponse<string>?> UploadAsync(IFormFile file);
-        Task<ServiceResponse<byte[]>?> DownloadAsync(string fileName);
+        Task<ServiceResponse<byte[]>?> DownloadAsync(int fileId, string fileName);
     }
 }

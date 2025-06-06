@@ -2,6 +2,9 @@
 using CloudFileStorage.Common.Models;
 using CloudFileStorage.UI.Helpers;
 using CloudFileStorage.UI.Models.DTOs;
+using CloudFileStorage.UI.Services.Interfaces;
+
+namespace CloudFileStorage.UI.Services;
 
 public class UserService : IUserService
 {
