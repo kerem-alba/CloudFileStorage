@@ -41,6 +41,11 @@ namespace CloudFileStorage.AuthApi.Repositories
         {
             return await _context.Users.ToListAsync();
         }
-
+        public async Task<List<User>> GetUsersByIdsAsync(List<int> ids)
+        {
+            return await _context.Users
+                .Where(u => ids.Contains(u.Id))
+                .ToListAsync();
+        }
     }
 }

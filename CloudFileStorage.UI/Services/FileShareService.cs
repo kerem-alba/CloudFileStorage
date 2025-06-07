@@ -22,8 +22,7 @@ namespace CloudFileStorage.UI.Services
 
         private Task<ServiceResponse<string>?> ShareFileAsync(CreateFileShareMetadataDto dto)
         {
-            var result = _apiRequestHelper.PostAsync<CreateFileShareMetadataDto, string>(ApiEndpoints.FileShares.ShareFile, dto);
-            return result;
+            return _apiRequestHelper.PostAsync<CreateFileShareMetadataDto, string>(ApiEndpoints.FileShares.ShareFile, dto);
         }
 
         public async Task<ServiceResponse<bool>?> ShareFileWithMultipleUsersAsync(int fileMetadataId, List<UserShareSelection> selectedUsers)

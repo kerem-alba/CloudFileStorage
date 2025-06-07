@@ -18,14 +18,7 @@ namespace CloudFileStorage.FileMetadataApi.CQRS.FileShareMetadata.Handlers
 
         public async Task<ServiceResponse<HasAccessResultDto>> Handle(CheckAccessQuery request, CancellationToken cancellationToken)
         {
-            var result = await _fileShareService.GetAccessInfoAsync(request.UserId, request.FileMetadataId);
-
-            return new ServiceResponse<HasAccessResultDto>
-            {
-                Success = true,
-                Data = result,
-                StatusCode = 200
-            };
+            return await _fileShareService.GetAccessInfoAsync(request.UserId, request.FileMetadataId);
         }
     }
 }

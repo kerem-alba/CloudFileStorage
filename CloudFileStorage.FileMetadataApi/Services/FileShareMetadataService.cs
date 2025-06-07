@@ -45,28 +45,6 @@ namespace CloudFileStorage.FileMetadataApi.Services
             }
         }
 
-
-        public async Task<HasAccessResultDto> GetAccessInfoAsync(int userId, int fileMetadataId)
-        {
-            var ownerId = await _repository.GetFileOwnerIdAsync(fileMetadataId);
-            if (ownerId == userId)
-            {
-                return new HasAccessResultDto
-                {
-                    HasAccess = true,
-                    Permission = "Edit"
-                };
-            }
-
-            var entity = await _repository.GetAsync(userId, fileMetadataId);
-
-            return new HasAccessResultDto
-            {
-                HasAccess = entity != null,
-                Permission = entity?.Permission.ToString()
-            };
-        }
-
         public async Task<ServiceResponse<string>> CreateAsync(CreateFileShareMetadataDto dto)
         {
             try
@@ -161,5 +139,48 @@ namespace CloudFileStorage.FileMetadataApi.Services
                 };
             }
         }
+
+        public async Task<ServiceResponse<HasAccessResultDto>> GetAccessInfoAsync(int userId, int fileMetadataId)
+        {
+            try
+            {
+                var ownerId = await _repository.GetFileOwnerIdAsync(fileMetadataId);
+                if (ownerId == userId)
+                {
+                    return new ServiceResponse<HasAccessResultDto>
+                    {
+                        Success = true,
+                        StatusCode = 200,
+                        Data = new HasAccessResultDto
+                        {
+                            HasAccess = true,
+                            Permission = "Edit"
+                        }
+                    };
+                }
+
+                var entity = await _repository.GetAsync(userId, fileMetadataId);
+                return new ServiceResponse<HasAccessResultDto>
+                {
+                    Success = true,
+                    StatusCode = 200,
+                    Data = new HasAccessResultDto
+                    {
+                        HasAccess = entity != null,
+                        Permission = entity?.Permission.ToString()
+                    }
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ServiceResponse<HasAccessResultDto>
+                {
+                    Success = false,
+                    StatusCode = 500,
+                    Message = ex.Message
+                };
+            }
+        }
+
     }
 }

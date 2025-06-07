@@ -31,7 +31,8 @@ namespace CloudFileStorage.FileMetadataApi.Repositories
                     Name = fm.Name,
                     FileName = fm.FileName,
                     Description = fm.Description,
-                    UploadDate = fm.UploadDate
+                    UploadDate = fm.UploadDate,
+                    OwnerId = fm.OwnerId,
                 }).ToListAsync();
         }
 

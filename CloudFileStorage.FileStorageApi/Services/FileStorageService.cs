@@ -125,7 +125,7 @@ public class FileStorageService : IFileStorageService
 
         try
         {
-            var token = _httpContextAccessor.HttpContext?.Request.Headers["Authorization"].ToString();
+            var token = _httpContextAccessor.HttpContext?.Request.Headers.Authorization.ToString();
 
             var client = _httpClientFactory.CreateClient();
             client.DefaultRequestHeaders.Add("Authorization", token);

@@ -46,14 +46,24 @@ namespace CloudFileStorage.UI.Controllers
 
             var result = await _fileShareService.GetSharedWithMeAsync();
 
-            if (result == null || !result.Success || result.Data == null)
+            if (result?.Success != true || result.Data == null)
             {
                 ViewBag.Error = result?.Message ?? UiMessages.GetSharedWithMeFilesFailed;
                 return View(new List<FileMetadataDto>());
             }
 
-            return View(result.Data);
+            var fileList = result.Data;
+            var ownerIds = fileList.Select(f => f.OwnerId).Distinct().ToList();
+
+            var ownerResponse = await _userService.GetUserNamesByIdsAsync(ownerIds);
+            var ownerMap = ownerResponse.Data?.ToDictionary(u => u.Id, u => u.Name) ?? [];
+
+            foreach (var file in fileList)
+                file.OwnerName = ownerMap.GetValueOrDefault(file.OwnerId, "Bilinmiyor");
+
+            return View(fileList);
         }
+
 
         //[HttpPost]
         //public async Task<IActionResult> Share(CreateFileShareMetadataDto dto)
