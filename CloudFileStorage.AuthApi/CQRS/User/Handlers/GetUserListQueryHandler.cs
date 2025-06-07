@@ -1,7 +1,5 @@
-﻿using CloudFileStorage.AuthApi.CQRS.User.Handlers;
-using CloudFileStorage.AuthApi.CQRS.User.Queries;
+﻿using CloudFileStorage.AuthApi.CQRS.User.Queries;
 using CloudFileStorage.AuthApi.Models.DTOs;
-using CloudFileStorage.AuthApi.Models.Entities;
 using CloudFileStorage.AuthApi.Repositories;
 using CloudFileStorage.Common.Constants;
 using CloudFileStorage.Common.Models;

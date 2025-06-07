@@ -5,6 +5,24 @@
 }
 
 <div class="container mt-5">
-    <h2 class="mb-4">Benimle Paylaşılanlar</h2>
+    <!-- Başlık gibi görünen dropdown -->
+    <div class="mb-4">
+        <div class="dropdown">
+            <a class="dropdown-toggle text-dark fs-4 fw-semibold text-decoration-none"
+               href="#" id="fileDropdown" role="button"
+               data-bs-toggle="dropdown" aria-expanded="false">
+                Benimle Paylaşılanlar
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                    <a class="dropdown-item" asp-controller="Home" asp-action="Index">Dosyalarım</a>
+                </li>
+                <li>
+                    <a class="dropdown-item active" asp-controller="Home" asp-action="SharedWithMe">Benimle Paylaşılanlar</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
     @await Component.InvokeAsync("SharedFileTable", Model)
 </div>

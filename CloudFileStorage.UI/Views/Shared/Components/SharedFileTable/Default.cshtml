@@ -6,8 +6,9 @@
             <tr>
                 <th>Dosya Adı</th>
                 <th>Yükleme Tarihi</th>
+                <th>Paylaşan</th>
+                <th>İzin</th>
                 <th>İşlemler</th>
-                <th>Paylaş</th>
                 <th></th>
             </tr>
         </thead>
@@ -17,6 +18,8 @@
                 <tr style="cursor: pointer;" ondblclick="location.href='@Url.Action("Detail", "Home", new { id = file.Id })'">
                     <td>@file.Name</td>
                     <td>@file.UploadDate.ToString("dd.MM.yyyy")</td>
+                    <td>@file.OwnerName</td>
+                    <td>@file.Permission</td>
                     <td>
                         <a class="dropdown-item" asp-controller="Home"
                            asp-action="Download"

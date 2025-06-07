@@ -245,7 +245,5 @@ namespace CloudFileStorage.FileMetadataApi.Services
                 };
             }
         }
-
-
     }
 }

@@ -7,4 +7,6 @@ public interface IUserService
 {
     Task<ServiceResponse<List<UserDto>>> GetAllUsersAsync();
     Task<ServiceResponse<string>> GetUserNameByIdAsync(int id);
+    Task<ServiceResponse<List<UserBasicDto>>> GetUserNamesByIdsAsync(List<int> ids);
+
 }

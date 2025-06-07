@@ -9,7 +9,7 @@ namespace CloudFileStorage.FileMetadataApi.Services.Interfaces
         Task<ServiceResponse<string>> CreateAsync(CreateFileShareMetadataDto dto);
         Task<ServiceResponse<string>> UpdateAsync(int id, UpdateFileShareMetadataDto dto);
         Task<ServiceResponse<string>> DeleteAsync(int id);
-        Task<HasAccessResultDto> GetAccessInfoAsync(int userId, int fileMetadataId);
+        Task<ServiceResponse<HasAccessResultDto>> GetAccessInfoAsync(int userId, int fileMetadataId);
 
     }
 }
