@@ -3,7 +3,6 @@ using CloudFileStorage.AuthApi.Repositories;
 using CloudFileStorage.AuthApi.Services;
 using CloudFileStorage.AuthApi.Validators;
 using SMediator.Core;
-using FluentValidation.AspNetCore;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using CloudFileStorage.AuthApi.Services.Interfaces;
@@ -29,8 +28,6 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddAutoMapper(typeof(AuthProfile));
 builder.Services.AddSMediator(typeof(Program).Assembly);
 
-builder.Services.AddFluentValidationAutoValidation();
-builder.Services.AddFluentValidationClientsideAdapters();
 builder.Services.AddValidatorsFromAssemblyContaining<RegisterUserDtoValidator>();
 
 var app = builder.Build();

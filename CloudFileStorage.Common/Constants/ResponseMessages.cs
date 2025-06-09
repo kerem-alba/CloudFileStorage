@@ -22,6 +22,7 @@
         public const string FileAccessDenied = "Bu dosyaya erişim yetkiniz yok.";
 
         public const string FileShareFetched = "Paylaşılan dosyalar başarıyla getirildi.";
+        public const string FileSharesRetrieved = "Dosya paylaşımları başarıyla alındı.";
         public const string NoFilesSharedWithYou = "Size paylaşılan dosya bulunmamaktadır.";
         public const string FilesFetched = "Dosyalar başarıyla getirildi.";
         public const string FileFetched = "Dosya başarıyla getirildi.";

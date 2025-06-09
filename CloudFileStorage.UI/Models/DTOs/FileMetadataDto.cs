@@ -11,8 +11,10 @@ namespace CloudFileStorage.UI.Models.DTOs
         public int OwnerId { get; set; }
         public string? OwnerName { get; set; }
         public string FileName { get; set; } = null!;
+        public bool IsPublic { get; set; }
         public Permission Permission { get; set; } = Permission.ReadOnly;
         public ShareType ShareType { get; set; } = ShareType.Private;
+        public bool IsOwner { get; set; }
 
     }
 }

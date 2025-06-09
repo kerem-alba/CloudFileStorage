@@ -7,6 +7,7 @@ namespace CloudFileStorage.UI.Services.Interfaces
     {
         Task<ServiceResponse<List<FileMetadataDto>>?> GetSharedWithMeAsync();
         Task<ServiceResponse<bool>?> ShareFileWithMultipleUsersAsync(int fileMetadataId, List<UserShareSelection> selectedUsers);
+        Task<ServiceResponse<List<FileShareDto>>?> GetFileSharesByFileIdAsync(int fileMetadataId);
 
     }
 }

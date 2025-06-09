@@ -1,8 +1,6 @@
 ﻿using CloudFileStorage.UI.Services.Interfaces;
 using CloudFileStorage.UI.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace CloudFileStorage.UI.ViewComponents
 {

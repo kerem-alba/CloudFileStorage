@@ -34,6 +34,7 @@
                                 asp-items="Html.GetEnumSelectList<CloudFileStorage.Common.Enums.Permission>()">
                         </select>
                     </div>
+                    <input type="hidden" asp-for="IsPublic" id="editIsPublicInput" name="IsPublic" />
                     <div class="mb-3" id="specificUserListContainer" style="display: none;">
                         @await Component.InvokeAsync("UserList", new { fileMetadataId = Model.Id })
                     </div>
@@ -51,16 +52,26 @@
 <script>
     const shareSelect = document.getElementById('editShareTypeSelect');
     const permissionDiv = document.getElementById('editPermissionContainer');
+    const form = document.querySelector('#editModal form');
+
 
     function togglePermissionEditModal() {
         const value = shareSelect.value;
         permissionDiv.style.display = value === '1' ? 'block' : 'none'; 
-        document.getElementById('specificUserListContainer').style.display = value === '2' ? 'block' : 'none'; 
-    }
+        document.getElementById('specificUserListContainer').style.display = value === '2' ? 'block' : 'none';
+        document.getElementById('editIsPublicInput').value = (value === '1') ? "true" : "false";
+        }
 
 
     if (shareSelect) {
         shareSelect.addEventListener('change', togglePermissionEditModal);
         window.addEventListener('DOMContentLoaded', togglePermissionEditModal);
     }
+    form.addEventListener('submit', function (e) {
+        const shareTypeValue = shareSelect.value;
+
+        if (shareTypeValue !== '2') {
+            document.querySelectorAll('[name^="SelectedUsers"]').forEach(el => el.remove());
+        }
+    });
 </script>

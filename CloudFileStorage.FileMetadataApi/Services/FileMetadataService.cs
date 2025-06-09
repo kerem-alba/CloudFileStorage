@@ -13,11 +13,13 @@ namespace CloudFileStorage.FileMetadataApi.Services
     {
         private readonly IFileMetadataRepository _repository;
         private readonly IMapper _mapper;
+        private readonly IFileShareMetadataService _fileShareService;
 
-        public FileMetadataService(IFileMetadataRepository repository, IMapper mapper)
+        public FileMetadataService(IFileMetadataRepository repository, IMapper mapper, IFileShareMetadataService fileShareService)
         {
             _repository = repository;
             _mapper = mapper;
+            _fileShareService = fileShareService;
         }
 
         public async Task<ServiceResponse<List<FileMetadata>>> GetAllFilesAsync(int ownerId)
@@ -111,7 +113,7 @@ namespace CloudFileStorage.FileMetadataApi.Services
             }
         }
 
-        public async Task<ServiceResponse<string>> UpdateFileAsync(int id, int ownerId, UpdateFileDto dto)
+        public async Task<ServiceResponse<string>> UpdateFileAsync(int id, int userId, UpdateFileDto dto)
         {
             try
             {
@@ -126,7 +128,23 @@ namespace CloudFileStorage.FileMetadataApi.Services
                     };
                 }
 
-                if (file.OwnerId != ownerId && (!file.IsPublic || file.Permission != Permission.Edit))
+                // 1. Eğer private ise sadece sahibi düzenleyebilir
+                if (!file.IsPublic && file.OwnerId != userId)
+                {
+                    // Kullanıcı özel yetkili mi kontrol et
+                    var access = await _fileShareService.GetAccessInfoAsync(userId, id);
+                    if (!access.Success || !access.Data.HasAccess || access.Data.Permission != "Edit")
+                    {
+                        return new ServiceResponse<string>
+                        {
+                            Success = false,
+                            StatusCode = 403,
+                            Message = ResponseMessages.FileUpdateNotAllowed
+                        };
+                    }
+                }
+                // 2. Eğer public ve readonly ise yine düzenlenemez
+                else if (file.IsPublic && file.Permission == Permission.ReadOnly && file.OwnerId != userId)
                 {
                     return new ServiceResponse<string>
                     {
@@ -138,6 +156,31 @@ namespace CloudFileStorage.FileMetadataApi.Services
 
                 _mapper.Map(dto, file);
                 await _repository.UpdateAsync(file);
+
+                if (dto.ShareType == ShareType.Specific && dto.SelectedUsers != null)
+                {
+                    // Önce tüm mevcut paylaşım kayıtlarını sil
+                    await _fileShareService.DeleteByFileIdAsync(id);
+
+                    // Yeni paylaşım kayıtlarını ekle
+                    var newShares = dto.SelectedUsers.Select(u => new FileShareDto
+                    {
+                        UserId = u.UserId,
+                        Permission = u.Permission
+                    }).ToList();
+
+                    var shareResult = await _fileShareService.CreateFileSharesAsync(id, newShares);
+
+                    if (!shareResult.Success)
+                    {
+                        return new ServiceResponse<string>
+                        {
+                            Success = false,
+                            StatusCode = 500,
+                            Message = ResponseMessages.FileShareFailed
+                        };
+                    }
+                }
 
                 return new ServiceResponse<string>
                 {
@@ -154,6 +197,7 @@ namespace CloudFileStorage.FileMetadataApi.Services
                 };
             }
         }
+
 
         public async Task<ServiceResponse<string>> DeleteFileAsync(int id)
         {
@@ -206,7 +250,6 @@ namespace CloudFileStorage.FileMetadataApi.Services
                 if (file.OwnerId == userId)
                 {
                     var dto = _mapper.Map<FileMetadataDto>(file);
-                    dto.Permission = Permission.Edit;
                     return new ServiceResponse<FileMetadataDto>
                     {
                         Data = dto,

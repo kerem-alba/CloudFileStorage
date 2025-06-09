@@ -21,22 +21,6 @@
 
     <div class="container">
 
-        @if (TempData["Message"] != null)
-        {
-            var type = TempData["MessageType"]?.ToString() ?? "info";
-            <div class="alert alert-@type alert-dismissible fade show mt-2" role="alert">
-                @TempData["Message"]
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        }
-        else if (ViewBag.Error != null)
-        {
-            <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
-                @ViewBag.Error
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        }
-
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
@@ -50,6 +34,35 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <!-- Toast container -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        @if (TempData["Message"] != null)
+        {
+            var type = TempData["MessageType"]?.ToString() ?? "info";
+            <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header bg-@type text-white">
+                    <strong class="me-auto">Bildirim</strong>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    @TempData["Message"]
+                </div>
+            </div>
+        }
+        @if (ViewBag.Error != null)
+        {
+            <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header bg-danger text-white">
+                    <strong class="me-auto">Hata</strong>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    @ViewBag.Error
+                </div>
+            </div>
+        }
+    </div>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

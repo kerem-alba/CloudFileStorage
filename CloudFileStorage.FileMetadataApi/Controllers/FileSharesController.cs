@@ -35,6 +35,13 @@ namespace CloudFileStorage.FileMetadataApi.Controllers
             return this.HandleResponse(response);
         }
 
+        [HttpGet("by-file/{fileId}")]
+        public async Task<IActionResult> GetFileSharesByFileId(int fileId)
+        {
+            var response = await _mediator.Send(new GetFileSharesByFileIdQuery(fileId));
+            return this.HandleResponse(response);
+        }
+
         [HttpPost]
         public async Task<IActionResult> ShareFile([FromBody] CreateFileShareMetadataDto dto)
         {
