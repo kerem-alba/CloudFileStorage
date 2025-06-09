@@ -1,10 +1,21 @@
 ﻿@using CloudFileStorage.UI.Models.DTOs
+@using CloudFileStorage.Common.Enums
 
 @model CloudFileStorage.UI.Models.DTOs.FileMetadataDto
 
 @{
     ViewData["Title"] = "Dosya Detayı";
     var fileType = System.IO.Path.GetExtension(Model.FileName);
+
+    string shareTypeDisplay = Model.IsPublic
+        ? "Herkese Açık"
+        : Model.Permission == Permission.ReadOnly
+            ? "Belirli Kullanıcılar"
+            : "Özel";
+
+    string permissionDisplay = Model.Permission == Permission.Edit
+        ? "Düzenleme"
+        : "Okuma";
 }
 
 <div class="container mt-5" style="max-width: 600px;">
@@ -15,6 +26,8 @@
         <li class="list-group-item"><strong>Yükleme Tarihi:</strong> @Model.UploadDate.ToString("dd.MM.yyyy")</li>
         <li class="list-group-item"><strong>Sahibi:</strong> @Model.OwnerName</li>
         <li class="list-group-item"><strong>Dosya Tipi:</strong> @fileType</li>
+        <li class="list-group-item"><strong>Paylaşım Türü:</strong> @shareTypeDisplay</li>
+        <li class="list-group-item"><strong>İzin:</strong> @permissionDisplay</li>
     </ul>
 
     <div class="text-center mb-4">
@@ -25,7 +38,7 @@
 
     <div class="d-flex justify-content-center gap-3">
         <a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
-        @if (Model.Permission == CloudFileStorage.Common.Enums.Permission.Edit)
+        @if (Model.Permission == Permission.Edit || Model.IsOwner)
         {
             <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editModal">Düzenle</button>
         }
@@ -40,5 +53,3 @@
     ShareType = Model.ShareType,
     Permission = Model.Permission
 })
-
-

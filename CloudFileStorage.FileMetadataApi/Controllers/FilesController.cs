@@ -23,16 +23,16 @@ namespace CloudFileStorage.FileMetadataApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            int ownerId = User.GetUserId();
-            var response = await _mediator.Send(new GetAllFilesQuery(ownerId));
+            int userId = User.GetUserId();
+            var response = await _mediator.Send(new GetAllFilesQuery(userId));
             return this.HandleResponse(response);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            int ownerId = User.GetUserId();
-            var response = await _mediator.Send(new GetFileByIdQuery(id, ownerId));
+            int userId = User.GetUserId();
+            var response = await _mediator.Send(new GetFileByIdQuery(id, userId));
             return this.HandleResponse(response);
         }
 
@@ -47,24 +47,24 @@ namespace CloudFileStorage.FileMetadataApi.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateFile([FromBody] CreateFileDto dto)
         {
-            int ownerId = User.GetUserId();
-            var response = await _mediator.Send(new CreateFileCommand(dto, ownerId));
+            int userId = User.GetUserId();
+            var response = await _mediator.Send(new CreateFileCommand(dto, userId));
             return this.HandleResponse(response);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateFileDto dto)
         {
-            int ownerId = User.GetUserId();
-            var response = await _mediator.Send(new UpdateFileCommand(id, ownerId, dto));
+            int userId = User.GetUserId();
+            var response = await _mediator.Send(new UpdateFileCommand(id, userId, dto));
             return this.HandleResponse(response);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            int ownerId = User.GetUserId();
-            var response = await _mediator.Send(new DeleteFileCommand(id, ownerId));
+            int userId = User.GetUserId();
+            var response = await _mediator.Send(new DeleteFileCommand(id, userId));
             return this.HandleResponse(response);
         }
     }

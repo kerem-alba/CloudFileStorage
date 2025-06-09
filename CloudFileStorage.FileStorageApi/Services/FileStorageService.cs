@@ -64,17 +64,7 @@ public class FileStorageService : IFileStorageService
     {
         try
         {
-            if (string.IsNullOrWhiteSpace(fileName))
-            {
-                return new ServiceResponse<byte[]>
-                {
-                    Success = false,
-                    Message = ResponseMessages.FileNameRequired,
-                    StatusCode = 400
-                };
-            }
-
-            var accessInfo = await GetAccessInfoAsync(userId.Value, fileId);
+            var accessInfo = await RequestFileAccessInfoAsync(userId.Value, fileId);
             if (accessInfo == null || !accessInfo.HasAccess)
             {
                 return new ServiceResponse<byte[]>
@@ -119,26 +109,25 @@ public class FileStorageService : IFileStorageService
     }
 
 
-    private async Task<FileAccessResultDto?> GetAccessInfoAsync(int userId, int fileMetadataId)
+    private async Task<FileAccessResultDto?> RequestFileAccessInfoAsync(int userId, int fileMetadataId)
     {
         var url = $"{ApiEndpoints.FileShares.CheckAccess}?userId={userId}&fileMetadataId={fileMetadataId}";
 
         try
         {
             var token = _httpContextAccessor.HttpContext?.Request.Headers.Authorization.ToString();
-
             var client = _httpClientFactory.CreateClient();
             client.DefaultRequestHeaders.Add("Authorization", token);
-
             var response = await client.GetAsync(url);
-            if (!response.IsSuccessStatusCode) return null;
-
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
             var json = await response.Content.ReadAsStringAsync();
             var result = JsonSerializer.Deserialize<ServiceResponse<FileAccessResultDto>>(json, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             });
-
             return result?.Data;
         }
         catch

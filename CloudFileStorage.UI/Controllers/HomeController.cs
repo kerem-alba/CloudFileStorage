@@ -1,4 +1,5 @@
 using CloudFileStorage.Common.Enums;
+using CloudFileStorage.Common.Extensions;
 using CloudFileStorage.UI.Constants;
 using CloudFileStorage.UI.Models.DTOs;
 using CloudFileStorage.UI.Services.Interfaces;
@@ -59,32 +60,10 @@ namespace CloudFileStorage.UI.Controllers
             var ownerMap = ownerResponse.Data?.ToDictionary(u => u.Id, u => u.Name) ?? [];
 
             foreach (var file in fileList)
-                file.OwnerName = ownerMap.GetValueOrDefault(file.OwnerId, "Bilinmiyor");
+                file.OwnerName = ownerMap.GetValueOrDefault(file.OwnerId);
 
             return View(fileList);
         }
-
-
-        //[HttpPost]
-        //public async Task<IActionResult> Share(CreateFileShareMetadataDto dto)
-        //{
-        //    var token = HttpContext.Session.GetString("token");
-        //    if (string.IsNullOrEmpty(token))
-        //        return RedirectToAction("Login", "Auth");
-
-        //    var result = await _fileShareService.ShareFileAsync(dto);
-
-        //    if (result == null || !result.Success)
-        //    {
-        //        TempData["Error"] = result?.Message ?? UiMessages.FileShareFailed;
-        //    }
-        //    else
-        //    {
-        //        TempData["Success"] = UiMessages.FileShareSuccess;
-        //    }
-
-        //    return RedirectToAction("Index");
-        //}
 
         [HttpGet]
         public async Task<IActionResult> Detail(int id)
@@ -104,6 +83,8 @@ namespace CloudFileStorage.UI.Controllers
 
             var userResult = await _userService.GetUserNameByIdAsync(file.OwnerId);
             file.OwnerName = userResult?.Data ?? UiMessages.NoName;
+            var userId = JwtHelper.GetUserIdFromToken(token);
+            file.IsOwner = file.OwnerId == userId;
 
             return View(result.Data);
         }
@@ -191,18 +172,22 @@ namespace CloudFileStorage.UI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(int id, UpdateFileDto dto)
+        public async Task<IActionResult> Update(UpdateFileDto dto)
         {
             var token = HttpContext.Session.GetString("token");
             if (string.IsNullOrEmpty(token))
                 return RedirectToAction("Login", "Auth");
 
-            var result = await _fileService.UpdateAsync(id, dto);
+            dto.SelectedUsers = dto.SelectedUsers?
+                .Where(u => u.UserId > 0)
+                .ToList();
+
+            var result = await _fileService.UpdateAsync(dto);
 
             if (result == null || !result.Success)
             {
                 ViewBag.Error = result?.Message ?? UiMessages.FileUpdateFailed;
-                ViewBag.FileId = id;
+                ViewBag.FileId = dto.Id;
                 return View(dto);
             }
 
@@ -225,7 +210,6 @@ namespace CloudFileStorage.UI.Controllers
 
             return RedirectToAction("Index");
         }
-
         [HttpGet("download")]
         public async Task<IActionResult> Download([FromQuery] int fileId, [FromQuery] string fileName)
         {
@@ -237,12 +221,14 @@ namespace CloudFileStorage.UI.Controllers
 
             if (result == null || !result.Success || result.Data == null)
             {
-                TempData["Error"] = result?.Message ?? "Dosya indirilemedi.";
-                return RedirectToAction("Index");
+                TempData["Message"] = result?.Message ?? UiMessages.FileDownloadFailed;
+                TempData["MessageType"] = "danger";
+                return RedirectToAction("Index", "Home");
             }
 
             return File(result.Data, "application/octet-stream", fileName);
         }
+
 
     }
 }

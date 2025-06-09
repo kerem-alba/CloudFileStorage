@@ -1,0 +1,39 @@
+﻿@model List<CloudFileStorage.UI.Models.DTOs.UserDto>
+
+@using CloudFileStorage.Common.Enums
+@{
+    var permissionOptions = new List<SelectListItem>
+    {
+        new SelectListItem { Value = Permission.ReadOnly.ToString(), Text = "Sadece Okuma" },
+        new SelectListItem { Value = Permission.Edit.ToString(), Text = "Düzenleme" }
+    };
+}
+
+@if (Model.Any())
+{
+    foreach (var user in Model)
+    {
+        <div class="row mb-2 user-row">
+            <div class="col-auto">
+                <input class="form-check-input" type="checkbox" value="@user.Id" id="user-@user.Id" />
+            </div>
+            <div class="col">
+                <label class="form-check-label" for="user-@user.Id">
+                    @user.Email
+                </label>
+            </div>
+            <div class="col">
+                <select class="form-select permission-select" data-user-id="@user.Id">
+                    @foreach (var option in permissionOptions)
+                    {
+                        <option value="@option.Value">@option.Text</option>
+                    }
+                </select>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="alert alert-info">Kullanıcı bulunamadı.</div>
+}

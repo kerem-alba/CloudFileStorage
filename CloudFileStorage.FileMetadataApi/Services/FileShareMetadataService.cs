@@ -45,6 +45,26 @@ namespace CloudFileStorage.FileMetadataApi.Services
             }
         }
 
+        public async Task<ServiceResponse<List<FileShareDto>>> GetFileSharesByFileIdAsync(int fileMetadataId)
+        {
+            var shares = await _repository.GetByFileMetadataIdAsync(fileMetadataId);
+
+            var dtoList = shares.Select(s => new FileShareDto
+            {
+                UserId = s.UserId,
+                Permission = s.Permission
+            }).ToList();
+
+            return new ServiceResponse<List<FileShareDto>>
+            {
+                Success = true,
+                StatusCode = 200,
+                Message = ResponseMessages.FileSharesRetrieved,
+                Data = dtoList
+            };
+
+        }
+
         public async Task<ServiceResponse<string>> CreateAsync(CreateFileShareMetadataDto dto)
         {
             try
@@ -76,7 +96,36 @@ namespace CloudFileStorage.FileMetadataApi.Services
             }
         }
 
+        public async Task<ServiceResponse<string>> CreateFileSharesAsync(int fileMetadataId, List<FileShareDto> shares)
+        {
+            try
+            {
+                var entities = shares.Select(s => new FileShareMetadata
+                {
+                    FileMetadataId = fileMetadataId,
+                    UserId = s.UserId,
+                    Permission = s.Permission
+                }).ToList();
 
+                await _repository.AddRangeAsync(entities);
+
+                return new ServiceResponse<string>
+                {
+                    Success = true,
+                    StatusCode = 201,
+                    Message = ResponseMessages.FileShareCreated
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ServiceResponse<string>
+                {
+                    Success = false,
+                    StatusCode = 500,
+                    Message = string.Format(ResponseMessages.FileShareFailed, ex.Message)
+                };
+            }
+        }
 
         public async Task<ServiceResponse<string>> UpdateAsync(int id, UpdateFileShareMetadataDto dto)
         {
@@ -140,12 +189,59 @@ namespace CloudFileStorage.FileMetadataApi.Services
             }
         }
 
+        public async Task<ServiceResponse<string>> DeleteByFileIdAsync(int fileMetadataId)
+        {
+            try
+            {
+                var result = await _repository.DeleteByFileMetadataIdAsync(fileMetadataId); 
+                return new ServiceResponse<string>
+                {
+                    Success = result,
+                    StatusCode = result ? 200 : 404,
+                    Message = result ? ResponseMessages.FileShareDeleted : ResponseMessages.FileShareNotFound
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ServiceResponse<string>
+                {
+                    Success = false,
+                    StatusCode = 500,
+                    Message = ex.Message
+                };
+            }
+        }
+
+
         public async Task<ServiceResponse<HasAccessResultDto>> GetAccessInfoAsync(int userId, int fileMetadataId)
         {
             try
             {
-                var ownerId = await _repository.GetFileOwnerIdAsync(fileMetadataId);
-                if (ownerId == userId)
+                var file = await _repository.GetFileMetadataAsync(fileMetadataId);
+                if (file == null)
+                {
+                    return new ServiceResponse<HasAccessResultDto>
+                    {
+                        Success = false,
+                        StatusCode = 404,
+                        Message = ResponseMessages.FileNotFound
+                    };
+                }
+                if (file.IsPublic)
+                {
+                    return new ServiceResponse<HasAccessResultDto>
+                    {
+                        Success = true,
+                        StatusCode = 200,
+                        Data = new HasAccessResultDto
+                        {
+                            HasAccess = true,
+                            Permission = file.Permission.ToString()
+                        }
+                    };
+                }
+
+                if (file.OwnerId == userId)
                 {
                     return new ServiceResponse<HasAccessResultDto>
                     {
@@ -160,14 +256,29 @@ namespace CloudFileStorage.FileMetadataApi.Services
                 }
 
                 var entity = await _repository.GetAsync(userId, fileMetadataId);
+                if (entity == null)
+                {
+                    return new ServiceResponse<HasAccessResultDto>
+                    {
+                        Success = false,
+                        StatusCode = 403,
+                        Message = ResponseMessages.FileAccessDenied,
+                        Data = new HasAccessResultDto
+                        {
+                            HasAccess = false,
+                            Permission = null
+                        }
+                    };
+                }
+
                 return new ServiceResponse<HasAccessResultDto>
                 {
                     Success = true,
                     StatusCode = 200,
                     Data = new HasAccessResultDto
                     {
-                        HasAccess = entity != null,
-                        Permission = entity?.Permission.ToString()
+                        HasAccess = true,
+                        Permission = entity.Permission.ToString()
                     }
                 };
             }
@@ -181,6 +292,5 @@ namespace CloudFileStorage.FileMetadataApi.Services
                 };
             }
         }
-
     }
 }

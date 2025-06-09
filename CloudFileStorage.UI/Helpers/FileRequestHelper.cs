@@ -2,6 +2,7 @@
 using CloudFileStorage.UI.Constants;
 using CloudFileStorage.UI.Services.Interfaces;
 using System.Net.Http.Headers;
+using System.Text.Json;
 
 namespace CloudFileStorage.UI.Helpers
 {
@@ -42,15 +43,31 @@ namespace CloudFileStorage.UI.Helpers
             var result = new ServiceResponse<byte[]>
             {
                 Success = response.IsSuccessStatusCode,
-                StatusCode = (int)response.StatusCode,
-                Message = response.IsSuccessStatusCode
-                    ? UiMessages.FileDownloadSuccess
-                    : UiMessages.FileDownloadFailed
+                StatusCode = (int)response.StatusCode
             };
 
             if (response.IsSuccessStatusCode)
             {
                 result.Data = await response.Content.ReadAsByteArrayAsync();
+                result.Message = UiMessages.FileDownloadSuccess;
+            }
+            else
+            {
+                var json = await response.Content.ReadAsStringAsync();
+
+                try
+                {
+                    var errorResponse = JsonSerializer.Deserialize<ServiceResponse<object>>(json, new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+
+                    result.Message = errorResponse?.Message ?? UiMessages.FileDownloadFailed;
+                }
+                catch
+                {
+                    result.Message = UiMessages.FileDownloadFailed;
+                }
             }
 
             return result;

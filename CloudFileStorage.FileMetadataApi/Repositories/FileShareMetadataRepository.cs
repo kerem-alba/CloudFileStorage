@@ -33,6 +33,7 @@ namespace CloudFileStorage.FileMetadataApi.Repositories
                     Description = fm.Description,
                     UploadDate = fm.UploadDate,
                     OwnerId = fm.OwnerId,
+                    IsPublic = fm.IsPublic,
                 }).ToListAsync();
         }
 
@@ -46,16 +47,35 @@ namespace CloudFileStorage.FileMetadataApi.Repositories
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<FileMetadata?> GetFileMetadataAsync(int fileMetadataId)
+        {
+            return await _context.Files
+                .FirstOrDefaultAsync(fm => fm.Id == fileMetadataId);
+        }
+
+        public async Task<List<FileShareMetadata>> GetByFileMetadataIdAsync(int fileMetadataId)
+        {
+            return await _context.FileShareMetadatas
+                .Where(fs => fs.FileMetadataId == fileMetadataId)
+                .ToListAsync();
+        }
+
 
         public async Task<FileShareMetadata?> GetAsync(int userId, int fileMetadataId)
         {
-            return await _context.FileShareMetadatas
+            var result = await _context.FileShareMetadatas
                 .FirstOrDefaultAsync(fs => fs.UserId == userId && fs.FileMetadataId == fileMetadataId);
+            return result;
         }
 
         public async Task AddAsync(FileShareMetadata entity)
         {
             _context.FileShareMetadatas.Add(entity);
+            await _context.SaveChangesAsync();
+        }
+        public async Task AddRangeAsync(List<FileShareMetadata> entities)
+        {
+            await _context.FileShareMetadatas.AddRangeAsync(entities);
             await _context.SaveChangesAsync();
         }
 
@@ -83,5 +103,20 @@ namespace CloudFileStorage.FileMetadataApi.Repositories
             return await _context.FileShareMetadatas
                 .AnyAsync(f => f.FileMetadataId == fileMetadataId && f.UserId == userId);
         }
+
+        public async Task<bool> DeleteByFileMetadataIdAsync(int fileMetadataId)
+        {
+            var shares = await _context.FileShareMetadatas
+                .Where(fs => fs.FileMetadataId == fileMetadataId)
+                .ToListAsync();
+
+            if (!shares.Any())
+                return false;
+
+            _context.FileShareMetadatas.RemoveRange(shares);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
     }
 }

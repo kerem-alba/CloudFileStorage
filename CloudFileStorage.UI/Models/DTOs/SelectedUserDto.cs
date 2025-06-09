@@ -2,10 +2,9 @@
 
 namespace CloudFileStorage.UI.Models.DTOs
 {
-    public class ShareModalDto
+    public class SelectedUserDto
     {
-        public int FileMetadataId { get; set; }
-        public ShareType ShareType { get; set; } = ShareType.Private;
+        public int UserId { get; set; }
         public Permission Permission { get; set; } = Permission.ReadOnly;
     }
 }

@@ -36,6 +36,7 @@
             public const string Update = $"{Base}/{{id}}";
             public const string Delete = $"{Base}/{{id}}";
             public const string CheckAccess = $"{Base}/check-access";
+            public const string GetByFileId = $"{Base}/by-file/{{id}}";
         }
 
         public static class FileStorage

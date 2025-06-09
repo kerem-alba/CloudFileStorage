@@ -11,5 +11,6 @@ namespace CloudFileStorage.FileMetadataApi.Models.DTOs
         public DateTime UploadDate { get; set; }
         public string FileName { get; set; } = null!;
         public Permission Permission { get; set; }
+        public bool IsPublic { get; set; }
     }
 }

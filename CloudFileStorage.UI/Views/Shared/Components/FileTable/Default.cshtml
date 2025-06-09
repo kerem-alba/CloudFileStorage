@@ -1,13 +1,12 @@
 ﻿@model List<CloudFileStorage.UI.Models.DTOs.FileMetadataDto>
 
-<div class="table-responsive">
+<div class="table-responsive" style="min-height: 400px">
     <table class="table table-hover align-middle text-center">
         <thead class="table-light">
             <tr>
                 <th>Dosya Adı</th>
                 <th>Yükleme Tarihi</th>
-                <th>İşlemler</th>
-                <th>Paylaş</th>
+                <th></th>
                 <th></th>
             </tr>
         </thead>
@@ -24,13 +23,7 @@
                            asp-route-fileName="@file.FileName">
                             <i class="bi bi-download me-2"></i>
                         </a>
-                    </td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#shareModal-@file.Id">
-                            <i class="bi bi-share"></i> Paylaş
-                        </button>
-                        @await Html.PartialAsync("Modals/_ShareModal", file.Id)
-                    </td>
+                    </td>                  
                     <td>
                         <div class="dropdown">
                             <button class="btn btn-link text-dark p-0" type="button" id="dropdownMenuButton-@file.Id" data-bs-toggle="dropdown" aria-expanded="false">

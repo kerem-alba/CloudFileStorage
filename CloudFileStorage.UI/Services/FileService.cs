@@ -39,9 +39,9 @@ namespace CloudFileStorage.UI.Services
             return _apiRequestHelper.PostAsync<CreateFileDto, FileMetadataDto>(ApiEndpoints.FileMetadata.Create, dto);
         }
 
-        public Task<ServiceResponse<FileMetadataDto>?> UpdateAsync(int id, UpdateFileDto dto)
+        public Task<ServiceResponse<FileMetadataDto>?> UpdateAsync(UpdateFileDto dto)
         {
-            var url = ApiEndpoints.FileMetadata.Update.Replace("{id}", id.ToString());
+            var url = ApiEndpoints.FileMetadata.Update.Replace("{id}", dto.Id.ToString());
             return _apiRequestHelper.PutAsync<UpdateFileDto, FileMetadataDto>(url, dto);
         }
 
@@ -62,6 +62,5 @@ namespace CloudFileStorage.UI.Services
             var url = $"{ApiEndpoints.FileStorage.Download}?fileId={fileId}&fileName={encodedFileName}";
             return _fileRequestHelper.GetFileAsync(url);
         }
-
     }
 }
