@@ -1,23 +1,24 @@
 ﻿using AutoMapper;
-using CloudFileStorage.Common.Models;
 using CloudFileStorage.Common.Constants;
+using CloudFileStorage.Common.Enums;
+using CloudFileStorage.Common.Models;
 using CloudFileStorage.FileMetadataApi.Models.DTOs;
 using CloudFileStorage.FileMetadataApi.Models.Entities;
 using CloudFileStorage.FileMetadataApi.Repositories;
+using CloudFileStorage.FileMetadataApi.Repositories.Interfaces;
 using CloudFileStorage.FileMetadataApi.Services.Interfaces;
-using CloudFileStorage.Common.Enums;
 
 namespace CloudFileStorage.FileMetadataApi.Services
 {
     public class FileMetadataService : IFileMetadataService
     {
-        private readonly IFileMetadataRepository _repository;
+        private readonly IFileMetadataRepository _fileRepository;
         private readonly IMapper _mapper;
         private readonly IFileShareMetadataService _fileShareService;
 
-        public FileMetadataService(IFileMetadataRepository repository, IMapper mapper, IFileShareMetadataService fileShareService)
+        public FileMetadataService(IFileMetadataRepository fileMetadataRepository, IMapper mapper, IFileShareMetadataService fileShareService)
         {
-            _repository = repository;
+            _fileRepository = fileMetadataRepository;
             _mapper = mapper;
             _fileShareService = fileShareService;
         }
@@ -26,7 +27,7 @@ namespace CloudFileStorage.FileMetadataApi.Services
         {
             try
             {
-                var files = await _repository.GetAllByOwnerIdAsync(ownerId);
+                var files = await _fileRepository.GetAllByOwnerIdAsync(ownerId);
 
                 return new ServiceResponse<List<FileMetadata>>
                 {
@@ -52,7 +53,7 @@ namespace CloudFileStorage.FileMetadataApi.Services
         {
             try
             {
-                var file = await _repository.GetByIdAsync(id);
+                var file = await _fileRepository.GetByIdAsync(id);
 
                 if (file == null)
                 {
@@ -91,7 +92,7 @@ namespace CloudFileStorage.FileMetadataApi.Services
                 file.Permission = dto.Permission ?? Permission.Edit;
 
 
-                await _repository.AddAsync(file);
+                await _fileRepository.AddAsync(file);
 
                 var fileDto = _mapper.Map<FileMetadataDto>(file);
 
@@ -117,7 +118,7 @@ namespace CloudFileStorage.FileMetadataApi.Services
         {
             try
             {
-                var file = await _repository.GetByIdAsync(id);
+                var file = await _fileRepository.GetByIdAsync(id);
                 if (file == null)
                 {
                     return new ServiceResponse<string>
@@ -155,7 +156,7 @@ namespace CloudFileStorage.FileMetadataApi.Services
                 }
 
                 _mapper.Map(dto, file);
-                await _repository.UpdateAsync(file);
+                await _fileRepository.UpdateAsync(file);
 
                 if (dto.ShareType == ShareType.Specific && dto.SelectedUsers != null)
                 {
@@ -203,7 +204,7 @@ namespace CloudFileStorage.FileMetadataApi.Services
         {
             try
             {
-                var file = await _repository.GetByIdAsync(id);
+                var file = await _fileRepository.GetByIdAsync(id);
                 if (file == null)
                 {
                     return new ServiceResponse<string>
@@ -214,7 +215,7 @@ namespace CloudFileStorage.FileMetadataApi.Services
                     };
                 }
 
-                await _repository.DeleteAsync(file);
+                await _fileRepository.DeleteAsync(file);
 
                 return new ServiceResponse<string>
                 {
@@ -236,7 +237,7 @@ namespace CloudFileStorage.FileMetadataApi.Services
         {
             try
             {
-                var file = await _repository.GetByIdAsync(fileId);
+                var file = await _fileRepository.GetByIdAsync(fileId);
                 if (file == null)
                 {
                     return new ServiceResponse<FileMetadataDto>
@@ -258,6 +259,20 @@ namespace CloudFileStorage.FileMetadataApi.Services
                     };
                 }
 
+                var shared = await _fileShareService.GetAsync(userId, fileId);
+
+                if (shared is not null)
+                {
+                    var dto = _mapper.Map<FileMetadataDto>(file);
+                    dto.Permission = shared.Permission;
+                    return new ServiceResponse<FileMetadataDto>
+                    {
+                        Data = dto,
+                        StatusCode = 200,
+                        Message = ResponseMessages.FileFetched
+                    };
+                }
+
                 if (file.IsPublic)
                 {
                     var dto = _mapper.Map<FileMetadataDto>(file);
@@ -269,7 +284,6 @@ namespace CloudFileStorage.FileMetadataApi.Services
                         Message = ResponseMessages.FileFetched
                     };
                 }
-
 
                 return new ServiceResponse<FileMetadataDto>
                 {

@@ -11,60 +11,72 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var file in Model)
+            @if (Model.Count == 0)
             {
-                <tr style="cursor: pointer;" ondblclick="location.href='@Url.Action("Detail", "Home", new { id = file.Id })'">
-                    <td>@file.Name</td>
-                    <td>@file.UploadDate.ToString("dd.MM.yyyy")</td>
-                    <td>
-                        <a class="dropdown-item" asp-controller="Home"
-                           asp-action="Download"
-                           asp-route-fileId="@file.Id"
-                           asp-route-fileName="@file.FileName">
-                            <i class="bi bi-download me-2"></i>
-                        </a>
-                    </td>                  
-                    <td>
-                        <div class="dropdown">
-                            <button class="btn btn-link text-dark p-0" type="button" id="dropdownMenuButton-@file.Id" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-three-dots-vertical fs-5"></i>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton-@file.Id">
-                                <li>
-                                    <a class="dropdown-item" asp-controller="Home"
-                                       asp-action="Download"
-                                       asp-route-fileId="@file.Id"
-                                       asp-route-fileName="@file.FileName">
-                                       <i class="bi bi-download me-2"></i>
-                                        Dosyayı İndir
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" asp-controller="Home"
-                                       asp-action="Detail"
-                                       asp-route-id="@file.Id">
-                                        <i class="bi bi-info-circle me-2"></i>
-                                        Bilgileri Düzenle
-                                    </a>
-                                </li>
-                                <li>
-                                    <form asp-controller="Home"
-                                          asp-action="Delete"
-                                          asp-route-id="@file.Id"
-                                          method="post"
-                                          onsubmit="return confirm('Bu dosyayı silmek istediğinize emin misiniz?');"
-                                          style="display:inline;">
-                                        <button type="submit" class="dropdown-item text-danger">
-                                            <i class="bi bi-trash me-2"></i>
-                                            Çöp kutusuna taşı
-                                        </button>
-                                    </form>
-                                </li>
-                            </ul>
-                        </div>
+                <tr>
+                    <td colspan="4" class="text-center text-muted py-5">
+                        Henüz hiç bir dosya yüklemediniz.
                     </td>
                 </tr>
             }
+            else
+            {
+                foreach (var file in Model)
+                {
+                    <tr style="cursor: pointer;" ondblclick="location.href='@Url.Action("Detail", "Home", new { id = file.Id })'">
+                        <td>@file.Name</td>
+                        <td>@file.UploadDate.ToString("dd.MM.yyyy")</td>
+                        <td>
+                            <a class="dropdown-item" asp-controller="Home"
+                               asp-action="Download"
+                               asp-route-fileId="@file.Id"
+                               asp-route-fileName="@file.FileName">
+                                <i class="bi bi-download me-2"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <div class="dropdown">
+                                <button class="btn btn-link text-dark p-0" type="button" id="dropdownMenuButton-@file.Id" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-three-dots-vertical fs-5"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton-@file.Id">
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Home"
+                                           asp-action="Download"
+                                           asp-route-fileId="@file.Id"
+                                           asp-route-fileName="@file.FileName">
+                                            <i class="bi bi-download me-2"></i>
+                                            Dosyayı İndir
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Home"
+                                           asp-action="Detail"
+                                           asp-route-id="@file.Id">
+                                            <i class="bi bi-info-circle me-2"></i>
+                                            Bilgileri Düzenle
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <form asp-controller="Home"
+                                              asp-action="Delete"
+                                              asp-route-id="@file.Id"
+                                              method="post"
+                                              onsubmit="return confirm('Bu dosyayı silmek istediğinize emin misiniz?');"
+                                              style="display:inline;">
+                                            <button type="submit" class="dropdown-item text-danger">
+                                                <i class="bi bi-trash me-2"></i>
+                                                Çöp kutusuna taşı
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
         </tbody>
+
     </table>
 </div>

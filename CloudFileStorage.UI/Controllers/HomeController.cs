@@ -96,9 +96,13 @@ namespace CloudFileStorage.UI.Controllers
             if (string.IsNullOrEmpty(token))
                 return RedirectToAction("Login", "Auth");
 
+            var userId = JwtHelper.GetUserIdFromToken(token);
+            var allUsers = (await _userService.GetAllUsersAsync()).Data ?? [];
+            var filteredUsers = allUsers.Where(u => u.Id != userId).ToList();
+
             var dto = new CreateFileDto
             {
-                UserList = (await _userService.GetAllUsersAsync()).Data ?? new List<UserDto>()
+                UserList = filteredUsers
             };
 
             return View(dto);

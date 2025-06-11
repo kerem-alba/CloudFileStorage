@@ -18,23 +18,22 @@ namespace CloudFileStorage.FileMetadataApi.Repositories
 
         public async Task<List<FileMetadataDto>> GetSharedFileMetadataListAsync(int userId)
         {
-            var fileIds = await _context.FileShareMetadatas
-                .Where(fs => fs.UserId == userId)
-                .Select(fs => fs.FileMetadataId)
-                .ToListAsync();
+            var sharedFiles = await (from fs in _context.FileShareMetadatas
+                                     join f in _context.Files on fs.FileMetadataId equals f.Id
+                                     where fs.UserId == userId
+                                     select new FileMetadataDto
+                                     {
+                                         Id = f.Id,
+                                         Name = f.Name,
+                                         FileName = f.FileName,
+                                         Description = f.Description,
+                                         UploadDate = f.UploadDate,
+                                         OwnerId = f.OwnerId,
+                                         IsPublic = f.IsPublic,
+                                         Permission = fs.Permission
+                                     }).ToListAsync();
 
-            return await _context.Files
-                .Where(fm => fileIds.Contains(fm.Id))
-                .Select(fm => new FileMetadataDto
-                {
-                    Id = fm.Id,
-                    Name = fm.Name,
-                    FileName = fm.FileName,
-                    Description = fm.Description,
-                    UploadDate = fm.UploadDate,
-                    OwnerId = fm.OwnerId,
-                    IsPublic = fm.IsPublic,
-                }).ToListAsync();
+            return sharedFiles;
         }
 
 
