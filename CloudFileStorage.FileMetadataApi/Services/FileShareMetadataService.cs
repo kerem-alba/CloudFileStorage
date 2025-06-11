@@ -19,6 +19,11 @@ namespace CloudFileStorage.FileMetadataApi.Services
             _repository = repository;
         }
 
+        public async Task<FileShareMetadata?> GetAsync(int userId, int fileMetadataId)
+        {
+            return await _repository.GetAsync(userId, fileMetadataId);
+        }
+
         public async Task<ServiceResponse<List<FileMetadataDto>>> GetFilesSharedWithUserAsync(int userId)
         {
             try
@@ -255,7 +260,7 @@ namespace CloudFileStorage.FileMetadataApi.Services
                     };
                 }
 
-                var entity = await _repository.GetAsync(userId, fileMetadataId);
+                var entity = await GetAsync(userId, fileMetadataId);
                 if (entity == null)
                 {
                     return new ServiceResponse<HasAccessResultDto>

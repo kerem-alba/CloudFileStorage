@@ -24,10 +24,12 @@
     </div>
 
     <a asp-action="Create"
-       class="btn btn-success rounded-circle d-flex justify-content-center align-items-center pb-3"
-       style="width: 64px; height: 64px; font-size: 52px">
+       class="btn btn-success rounded-circle d-flex justify-content-center align-items-center pb-3 mb-3"
+       style="width: 64px; height: 64px; font-size: 52px"
+       title="Yeni dosya oluştur">
         <span>+</span>
     </a>
+
 
     @await Component.InvokeAsync("FileTable", Model)
 </div>

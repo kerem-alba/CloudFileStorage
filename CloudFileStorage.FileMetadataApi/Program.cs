@@ -11,6 +11,7 @@ using CloudFileStorage.FileMetadataApi.Repositories.Interfaces;
 using CloudFileStorage.FileMetadataApi.Services.Interfaces;
 using CloudFileStorage.FileMetadataApi.Validators;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -96,5 +97,9 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<FileMetadataDbContext>();
+    db.Database.EnsureCreated();
+}
 app.Run();

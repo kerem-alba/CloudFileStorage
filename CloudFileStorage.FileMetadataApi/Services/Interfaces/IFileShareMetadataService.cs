@@ -1,10 +1,12 @@
-﻿using CloudFileStorage.FileMetadataApi.Models.DTOs;
-using CloudFileStorage.Common.Models;
+﻿using CloudFileStorage.Common.Models;
+using CloudFileStorage.FileMetadataApi.Models.DTOs;
+using CloudFileStorage.FileMetadataApi.Models.Entities;
 
 namespace CloudFileStorage.FileMetadataApi.Services.Interfaces
 {
     public interface IFileShareMetadataService
     {
+        Task<FileShareMetadata?> GetAsync(int userId, int fileMetadataId);
         Task<ServiceResponse<List<FileMetadataDto>>> GetFilesSharedWithUserAsync(int userId);
         Task<ServiceResponse<List<FileShareDto>>> GetFileSharesByFileIdAsync(int fileMetadataId);
         Task<ServiceResponse<string>> CreateAsync(CreateFileShareMetadataDto dto);

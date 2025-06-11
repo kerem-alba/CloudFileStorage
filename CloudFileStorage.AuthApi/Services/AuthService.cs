@@ -39,12 +39,12 @@ public class AuthService : IAuthService
             user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
             user.Role = UserRole.User;
 
+            await _userRepository.AddAsync(user);
+
             var (accessToken, refreshToken, refreshExpire) = _tokenService.GenerateTokens(user);
 
             user.RefreshToken = refreshToken;
             user.RefreshTokenExpireDate = refreshExpire;
-
-            await _userRepository.AddAsync(user);
 
             return new ServiceResponse<AuthResponseDto>
             {
