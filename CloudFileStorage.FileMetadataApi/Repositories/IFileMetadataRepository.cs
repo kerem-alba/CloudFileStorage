@@ -1,5 +1,4 @@
 ﻿using CloudFileStorage.FileMetadataApi.Models.Entities;
-using System.Threading.Tasks;
 
 namespace CloudFileStorage.FileMetadataApi.Repositories
 {

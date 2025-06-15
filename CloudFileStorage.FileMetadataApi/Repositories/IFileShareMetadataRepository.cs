@@ -2,7 +2,7 @@
 using CloudFileStorage.FileMetadataApi.Models.DTOs;
 using CloudFileStorage.FileMetadataApi.Models.Entities;
 
-namespace CloudFileStorage.FileMetadataApi.Repositories.Interfaces
+namespace CloudFileStorage.FileMetadataApi.Repositories
 {
     public interface IFileShareMetadataRepository
     {

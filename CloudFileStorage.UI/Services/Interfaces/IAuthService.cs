@@ -1,5 +1,4 @@
-﻿using CloudFileStorage.UI.Models;
-using CloudFileStorage.Common.Models;
+﻿using CloudFileStorage.Common.Models;
 using CloudFileStorage.UI.Models.DTOs;
 
 namespace CloudFileStorage.UI.Services.Interfaces

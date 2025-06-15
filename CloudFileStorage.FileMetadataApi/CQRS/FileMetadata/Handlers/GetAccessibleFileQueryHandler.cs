@@ -1,5 +1,4 @@
 ﻿using SMediator.Core.Abstractions;
-using AutoMapper;
 using CloudFileStorage.FileMetadataApi.Models.DTOs;
 using CloudFileStorage.FileMetadataApi.Services.Interfaces;
 using CloudFileStorage.FileMetadataApi.CQRS.FileMetadata.Queries;

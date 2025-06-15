@@ -11,9 +11,9 @@ namespace CloudFileStorage.UI.Services
     {
         private readonly ApiRequestHelper _apiRequestHelper;
 
-        public AuthService(ApiRequestHelper ApiRequestHelper)
+        public AuthService(ApiRequestHelper apiRequestHelper)
         {
-            _apiRequestHelper = ApiRequestHelper;
+            _apiRequestHelper = apiRequestHelper;
         }
 
         public Task<ServiceResponse<AuthResponseDto>?> LoginAsync(LoginUserDto dto)

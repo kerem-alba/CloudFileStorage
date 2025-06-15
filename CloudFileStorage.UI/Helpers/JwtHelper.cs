@@ -1,6 +1,8 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
+namespace CloudFileStorage.UI.Helpers;
+
 public static class JwtHelper
 {
     public static int? GetUserIdFromToken(string token)

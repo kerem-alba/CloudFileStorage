@@ -3,6 +3,8 @@ using CloudFileStorage.FileStorageApi.CQRS.Commands;
 using CloudFileStorage.FileStorageApi.Services;
 using SMediator.Core.Abstractions;
 
+namespace CloudFileStorage.FileStorageApi.CQRS.Handlers;
+
 public class UploadFileCommandHandler : IRequestHandler<UploadFileCommand, ServiceResponse<string>>
 {
     private readonly IFileStorageService _fileStorageService;

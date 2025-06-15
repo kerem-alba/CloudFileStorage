@@ -1,7 +1,5 @@
 ﻿using CloudFileStorage.Common.Enums;
-using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CloudFileStorage.FileMetadataApi.Models.Entities
 {
@@ -18,6 +16,7 @@ namespace CloudFileStorage.FileMetadataApi.Models.Entities
         public string? Description { get; set; }
 
         [Required]
+        [MaxLength(100)]
         public string FileName { get; set; } = null!;
 
         [Required]

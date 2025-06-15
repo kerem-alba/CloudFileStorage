@@ -2,7 +2,6 @@
 using CloudFileStorage.FileMetadataApi.Contexts;
 using CloudFileStorage.FileMetadataApi.Models.DTOs;
 using CloudFileStorage.FileMetadataApi.Models.Entities;
-using CloudFileStorage.FileMetadataApi.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace CloudFileStorage.FileMetadataApi.Repositories

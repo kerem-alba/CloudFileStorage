@@ -1,6 +1,6 @@
 using CloudFileStorage.Common.Enums;
-using CloudFileStorage.Common.Extensions;
 using CloudFileStorage.UI.Constants;
+using CloudFileStorage.UI.Helpers;
 using CloudFileStorage.UI.Models.DTOs;
 using CloudFileStorage.UI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -153,28 +153,6 @@ namespace CloudFileStorage.UI.Controllers
         }
 
 
-        [HttpGet]
-        public async Task<IActionResult> Update(int id)
-        {
-            var token = HttpContext.Session.GetString("token");
-            if (string.IsNullOrEmpty(token))
-                return RedirectToAction("Login", "Auth");
-
-            var result = await _fileService.GetByIdAsync(id);
-
-            if (result == null || !result.Success || result.Data == null)
-                return RedirectToAction("Index");
-
-            var dto = new UpdateFileDto
-            {
-                Name = result.Data.Name,
-                Description = result.Data.Description
-            };
-
-            ViewBag.FileId = id;
-            return View(dto);
-        }
-
         [HttpPost]
         public async Task<IActionResult> Update(UpdateFileDto dto)
         {
@@ -192,7 +170,7 @@ namespace CloudFileStorage.UI.Controllers
             {
                 ViewBag.Error = result?.Message ?? UiMessages.FileUpdateFailed;
                 ViewBag.FileId = dto.Id;
-                return View(dto);
+                return RedirectToAction("Index");
             }
 
             return RedirectToAction("Detail", new { id = dto.Id });

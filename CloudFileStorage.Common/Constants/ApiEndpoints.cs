@@ -12,7 +12,6 @@
 
             public const string UsersBase = $"{GatewayBase}/User";
             public const string GetUserNameById = $"{UsersBase}/{{id}}";
-            public const string GetAllUsers = $"{UsersBase}";
             public const string GetUserList = $"{UsersBase}/list";
             public const string GetUserNamesByIds = UsersBase + "/names";
         }
@@ -33,8 +32,6 @@
             public const string Base = $"{GatewayBase}/FileShares";
             public const string SharedWithMe = $"{Base}/shared-with-me";
             public const string ShareFile = $"{Base}";
-            public const string Update = $"{Base}/{{id}}";
-            public const string Delete = $"{Base}/{{id}}";
             public const string CheckAccess = $"{Base}/check-access";
             public const string GetByFileId = $"{Base}/by-file/{{id}}";
         }

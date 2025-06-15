@@ -1,21 +1,19 @@
-﻿using CloudFileStorage.Common.Constants;
+﻿using System.Text.Json;
+using CloudFileStorage.Common.Constants;
 using CloudFileStorage.Common.Models;
 using CloudFileStorage.FileStorageApi.Models.DTOs;
-using CloudFileStorage.FileStorageApi.Services;
-using System.Net.Http;
-using System.Text.Json;
+
+namespace CloudFileStorage.FileStorageApi.Services;
 
 public class FileStorageService : IFileStorageService
 {
     private readonly IConfiguration _configuration;
-    private readonly HttpClient _httpClient;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IHttpClientFactory _httpClientFactory;
 
-    public FileStorageService(IConfiguration configuration, HttpClient httpClient, IHttpContextAccessor httpContextAccessor, IHttpClientFactory httpClientFactory)
+    public FileStorageService(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IHttpClientFactory httpClientFactory)
     {
         _configuration = configuration;
-        _httpClient = httpClient;
         _httpContextAccessor = httpContextAccessor;
         _httpClientFactory = httpClientFactory;
     }
@@ -24,7 +22,7 @@ public class FileStorageService : IFileStorageService
     {
         try
         {
-            if (file == null || file.Length == 0)
+            if (file.Length == 0)
             {
                 return new ServiceResponse<string>
                 {

@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using SMediator.Core.Abstractions;
+﻿using SMediator.Core.Abstractions;
 using CloudFileStorage.AuthApi.CQRS.Auth.Commands;
 using CloudFileStorage.AuthApi.Services.Interfaces;
 using CloudFileStorage.Common.Models;

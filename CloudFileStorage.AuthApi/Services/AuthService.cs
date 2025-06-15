@@ -7,6 +7,8 @@ using CloudFileStorage.AuthApi.Services.Interfaces;
 using CloudFileStorage.Common.Constants;
 using CloudFileStorage.Common.Models;
 
+namespace CloudFileStorage.AuthApi.Services;
+
 public class AuthService : IAuthService
 {
     private readonly IUserRepository _userRepository;

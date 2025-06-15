@@ -1,8 +1,10 @@
-﻿using CloudFileStorage.Common.Models;
+﻿using CloudFileStorage.Common.Extensions;
+using CloudFileStorage.Common.Models;
 using CloudFileStorage.FileStorageApi.CQRS.Queries;
 using CloudFileStorage.FileStorageApi.Services;
-using CloudFileStorage.Common.Extensions;
 using SMediator.Core.Abstractions;
+
+namespace CloudFileStorage.FileStorageApi.CQRS.Handlers;
 
 public class DownloadFileQueryHandler : IRequestHandler<DownloadFileQuery, ServiceResponse<byte[]>>
 {

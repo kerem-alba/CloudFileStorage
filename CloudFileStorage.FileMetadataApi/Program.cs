@@ -7,7 +7,6 @@ using FluentValidation;
 using CloudFileStorage.FileMetadataApi.Contexts;
 using CloudFileStorage.FileMetadataApi.Repositories;
 using CloudFileStorage.FileMetadataApi.Services;
-using CloudFileStorage.FileMetadataApi.Repositories.Interfaces;
 using CloudFileStorage.FileMetadataApi.Services.Interfaces;
 using CloudFileStorage.FileMetadataApi.Validators;
 

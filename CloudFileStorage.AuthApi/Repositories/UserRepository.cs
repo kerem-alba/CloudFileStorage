@@ -1,4 +1,4 @@
-﻿using CloudFileStorage.AuthApi.Data;
+﻿using CloudFileStorage.AuthApi.Contexts;
 using CloudFileStorage.AuthApi.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 

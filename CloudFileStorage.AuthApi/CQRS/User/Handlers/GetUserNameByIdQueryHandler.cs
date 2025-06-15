@@ -1,5 +1,4 @@
 ﻿using CloudFileStorage.AuthApi.CQRS.User.Queries;
-using CloudFileStorage.AuthApi.Repositories;
 using CloudFileStorage.AuthApi.Services.Interfaces;
 using CloudFileStorage.Common.Models;
 using SMediator.Core.Abstractions;

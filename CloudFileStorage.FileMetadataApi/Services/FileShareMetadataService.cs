@@ -1,21 +1,18 @@
-﻿using AutoMapper;
-using CloudFileStorage.FileMetadataApi.Models.DTOs;
+﻿using CloudFileStorage.FileMetadataApi.Models.DTOs;
 using CloudFileStorage.FileMetadataApi.Models.Entities;
 using CloudFileStorage.FileMetadataApi.Services.Interfaces;
 using CloudFileStorage.Common.Models;
 using CloudFileStorage.Common.Constants;
-using CloudFileStorage.FileMetadataApi.Repositories.Interfaces;
+using CloudFileStorage.FileMetadataApi.Repositories;
 
 namespace CloudFileStorage.FileMetadataApi.Services
 {
     public class FileShareMetadataService : IFileShareMetadataService
     {
-        private readonly IMapper _mapper;
         private readonly IFileShareMetadataRepository _repository;
 
-        public FileShareMetadataService(IMapper mapper, IFileShareMetadataRepository repository)
+        public FileShareMetadataService(IFileShareMetadataRepository repository)
         {
-            _mapper = mapper;
             _repository = repository;
         }
 
@@ -198,7 +195,7 @@ namespace CloudFileStorage.FileMetadataApi.Services
         {
             try
             {
-                var result = await _repository.DeleteByFileMetadataIdAsync(fileMetadataId); 
+                var result = await _repository.DeleteByFileMetadataIdAsync(fileMetadataId);
                 return new ServiceResponse<string>
                 {
                     Success = result,

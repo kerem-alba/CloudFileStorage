@@ -17,6 +17,7 @@ namespace CloudFileStorage.AuthApi.Models.Entities
         public string Email { get; set; } = null!;
 
         [Required]
+        [MaxLength(100)]
         public string PasswordHash { get; set; } = null!;
 
         [Required]

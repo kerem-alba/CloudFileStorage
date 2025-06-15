@@ -1,10 +1,8 @@
 ﻿using CloudFileStorage.Common.Constants;
 using CloudFileStorage.Common.Models;
-using CloudFileStorage.UI.Constants;
 using CloudFileStorage.UI.Helpers;
 using CloudFileStorage.UI.Models.DTOs;
 using CloudFileStorage.UI.Services.Interfaces;
-using System.Net.Http;
 
 namespace CloudFileStorage.UI.Services
 {

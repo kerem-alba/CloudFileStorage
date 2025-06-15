@@ -1,8 +1,7 @@
 ﻿using CloudFileStorage.AuthApi.Models.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
-namespace CloudFileStorage.AuthApi.Data
+namespace CloudFileStorage.AuthApi.Contexts
 {
     public class AuthDbContext(DbContextOptions<AuthDbContext> options) : DbContext(options)
     {

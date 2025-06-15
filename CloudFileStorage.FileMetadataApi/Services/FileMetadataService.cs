@@ -5,29 +5,21 @@ using CloudFileStorage.Common.Models;
 using CloudFileStorage.FileMetadataApi.Models.DTOs;
 using CloudFileStorage.FileMetadataApi.Models.Entities;
 using CloudFileStorage.FileMetadataApi.Repositories;
-using CloudFileStorage.FileMetadataApi.Repositories.Interfaces;
 using CloudFileStorage.FileMetadataApi.Services.Interfaces;
 
 namespace CloudFileStorage.FileMetadataApi.Services
 {
-    public class FileMetadataService : IFileMetadataService
+    public class FileMetadataService(
+        IFileMetadataRepository fileMetadataRepository,
+        IMapper mapper,
+        IFileShareMetadataService fileShareService)
+        : IFileMetadataService
     {
-        private readonly IFileMetadataRepository _fileRepository;
-        private readonly IMapper _mapper;
-        private readonly IFileShareMetadataService _fileShareService;
-
-        public FileMetadataService(IFileMetadataRepository fileMetadataRepository, IMapper mapper, IFileShareMetadataService fileShareService)
-        {
-            _fileRepository = fileMetadataRepository;
-            _mapper = mapper;
-            _fileShareService = fileShareService;
-        }
-
         public async Task<ServiceResponse<List<FileMetadata>>> GetAllFilesAsync(int ownerId)
         {
             try
             {
-                var files = await _fileRepository.GetAllByOwnerIdAsync(ownerId);
+                var files = await fileMetadataRepository.GetAllByOwnerIdAsync(ownerId);
 
                 return new ServiceResponse<List<FileMetadata>>
                 {
@@ -53,7 +45,7 @@ namespace CloudFileStorage.FileMetadataApi.Services
         {
             try
             {
-                var file = await _fileRepository.GetByIdAsync(id);
+                var file = await fileMetadataRepository.GetByIdAsync(id);
 
                 if (file == null)
                 {
@@ -85,16 +77,16 @@ namespace CloudFileStorage.FileMetadataApi.Services
         {
             try
             {
-                var file = _mapper.Map<FileMetadata>(dto);
+                var file = mapper.Map<FileMetadata>(dto);
                 file.OwnerId = ownerId;
                 file.UploadDate = DateTime.UtcNow;
                 file.IsPublic = dto.ShareType == ShareType.Public;
                 file.Permission = dto.Permission ?? Permission.Edit;
 
 
-                await _fileRepository.AddAsync(file);
+                await fileMetadataRepository.AddAsync(file);
 
-                var fileDto = _mapper.Map<FileMetadataDto>(file);
+                var fileDto = mapper.Map<FileMetadataDto>(file);
 
                 return new ServiceResponse<FileMetadataDto>
                 {
@@ -119,7 +111,7 @@ namespace CloudFileStorage.FileMetadataApi.Services
         {
             try
             {
-                var file = await _fileRepository.GetByIdAsync(id);
+                var file = await fileMetadataRepository.GetByIdAsync(id);
                 if (file == null)
                 {
                     return new ServiceResponse<string>
@@ -133,7 +125,7 @@ namespace CloudFileStorage.FileMetadataApi.Services
                 // public değil, dosya sahibi değil, edit yetkisi yok
                 if (!file.IsPublic && file.OwnerId != userId)
                 {
-                    var access = await _fileShareService.GetAccessInfoAsync(userId, id);
+                    var access = await fileShareService.GetAccessInfoAsync(userId, id);
                     if (!access.Success || !access.Data.HasAccess || access.Data.Permission != "Edit")
                     {
                         return new ServiceResponse<string>
@@ -155,19 +147,19 @@ namespace CloudFileStorage.FileMetadataApi.Services
                     };
                 }
 
-                _mapper.Map(dto, file);
-                await _fileRepository.UpdateAsync(file);
+                mapper.Map(dto, file);
+                await fileMetadataRepository.UpdateAsync(file);
 
                 if (dto.ShareType == ShareType.Specific && dto.SelectedUsers != null)
                 {
-                    await _fileShareService.DeleteByFileIdAsync(id);
+                    await fileShareService.DeleteByFileIdAsync(id);
                     var newShares = dto.SelectedUsers.Select(u => new FileShareDto
                     {
                         UserId = u.UserId,
                         Permission = u.Permission
                     }).ToList();
 
-                    var shareResult = await _fileShareService.CreateFileSharesAsync(id, newShares);
+                    var shareResult = await fileShareService.CreateFileSharesAsync(id, newShares);
 
                     if (!shareResult.Success)
                     {
@@ -201,7 +193,7 @@ namespace CloudFileStorage.FileMetadataApi.Services
         {
             try
             {
-                var file = await _fileRepository.GetByIdAsync(id);
+                var file = await fileMetadataRepository.GetByIdAsync(id);
                 if (file == null)
                 {
                     return new ServiceResponse<string>
@@ -212,7 +204,7 @@ namespace CloudFileStorage.FileMetadataApi.Services
                     };
                 }
 
-                await _fileRepository.DeleteAsync(file);
+                await fileMetadataRepository.DeleteAsync(file);
 
                 return new ServiceResponse<string>
                 {
@@ -234,7 +226,7 @@ namespace CloudFileStorage.FileMetadataApi.Services
         {
             try
             {
-                var file = await _fileRepository.GetByIdAsync(fileId);
+                var file = await fileMetadataRepository.GetByIdAsync(fileId);
                 if (file == null)
                 {
                     return new ServiceResponse<FileMetadataDto>
@@ -247,7 +239,7 @@ namespace CloudFileStorage.FileMetadataApi.Services
 
                 if (file.OwnerId == userId)
                 {
-                    var dto = _mapper.Map<FileMetadataDto>(file);
+                    var dto = mapper.Map<FileMetadataDto>(file);
                     return new ServiceResponse<FileMetadataDto>
                     {
                         Data = dto,
@@ -256,11 +248,11 @@ namespace CloudFileStorage.FileMetadataApi.Services
                     };
                 }
 
-                var shared = await _fileShareService.GetAsync(userId, fileId);
+                var shared = await fileShareService.GetAsync(userId, fileId);
 
                 if (shared is not null)
                 {
-                    var dto = _mapper.Map<FileMetadataDto>(file);
+                    var dto = mapper.Map<FileMetadataDto>(file);
                     dto.Permission = shared.Permission;
                     return new ServiceResponse<FileMetadataDto>
                     {
@@ -272,7 +264,7 @@ namespace CloudFileStorage.FileMetadataApi.Services
 
                 if (file.IsPublic)
                 {
-                    var dto = _mapper.Map<FileMetadataDto>(file);
+                    var dto = mapper.Map<FileMetadataDto>(file);
                     dto.Permission = file.Permission;
                     return new ServiceResponse<FileMetadataDto>
                     {

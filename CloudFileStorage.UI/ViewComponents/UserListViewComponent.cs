@@ -18,8 +18,6 @@ namespace CloudFileStorage.UI.ViewComponents
             var result = await _userService.GetAllUsersAsync();
             var users = result?.Success == true && result.Data != null ? result.Data : new List<UserDto>();
 
-            Console.WriteLine($"UserList: Found {users.Count} users");
-
             if (fileMetadataId.HasValue)
             {
                 ViewBag.FileMetadataId = fileMetadataId.Value;
