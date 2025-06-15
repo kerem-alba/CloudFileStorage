@@ -49,7 +49,11 @@ namespace CloudFileStorage.FileMetadataApi.Controllers
         {
             int userId = User.GetUserId();
             var response = await _mediator.Send(new CreateFileCommand(dto, userId));
-            return this.HandleResponse(response);
+            if (response.Data == null)
+            {
+                return this.HandleResponse(response);
+            }
+            return this.HandleResponse(response, nameof(GetById), new { id = response.Data.Id });
         }
 
         [HttpPut("{id}")]

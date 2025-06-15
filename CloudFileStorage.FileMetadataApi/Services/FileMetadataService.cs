@@ -100,7 +100,8 @@ namespace CloudFileStorage.FileMetadataApi.Services
                 {
                     Success = true,
                     Data = fileDto,
-                    Message = ResponseMessages.FileCreated
+                    Message = ResponseMessages.FileCreated,
+                    StatusCode = 201
                 };
             }
             catch (Exception ex)
@@ -129,10 +130,9 @@ namespace CloudFileStorage.FileMetadataApi.Services
                     };
                 }
 
-                // 1. Eğer private ise sadece sahibi düzenleyebilir
+                // public değil, dosya sahibi değil, edit yetkisi yok
                 if (!file.IsPublic && file.OwnerId != userId)
                 {
-                    // Kullanıcı özel yetkili mi kontrol et
                     var access = await _fileShareService.GetAccessInfoAsync(userId, id);
                     if (!access.Success || !access.Data.HasAccess || access.Data.Permission != "Edit")
                     {
@@ -144,7 +144,7 @@ namespace CloudFileStorage.FileMetadataApi.Services
                         };
                     }
                 }
-                // 2. Eğer public ve readonly ise yine düzenlenemez
+                // public, dosya sahibi değil, dosya readonly
                 else if (file.IsPublic && file.Permission == Permission.ReadOnly && file.OwnerId != userId)
                 {
                     return new ServiceResponse<string>
@@ -160,10 +160,7 @@ namespace CloudFileStorage.FileMetadataApi.Services
 
                 if (dto.ShareType == ShareType.Specific && dto.SelectedUsers != null)
                 {
-                    // Önce tüm mevcut paylaşım kayıtlarını sil
                     await _fileShareService.DeleteByFileIdAsync(id);
-
-                    // Yeni paylaşım kayıtlarını ekle
                     var newShares = dto.SelectedUsers.Select(u => new FileShareDto
                     {
                         UserId = u.UserId,
