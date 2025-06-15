@@ -19,13 +19,23 @@ The project is divided into several modules, each responsible for a specific fun
 
 ### Modules
 
-CloudFileStorage/
-├── CloudFileStorage.AuthApi/ # Handles user registration, login, and JWT token management (localhost:5001)
-├── CloudFileStorage.Common/ # Contains shared constants, helpers, and DTOs
-├── CloudFileStorage.FileMetadataApi/ # Manages file metadata and sharing settings (localhost:5002)
-├── CloudFileStorage.FileStorageApi/ # Handles physical file upload/download operations (localhost:5003)
-├── CloudFileStorage.GatewayApi/ # Acts as API Gateway and routes requests to other services (localhost:5000)
-└── CloudFileStorage.UI/ # ASP.NET Core MVC frontend project for user interaction (localhost:5500)
+- CloudFileStorage.AuthApi/  
+  Handles user registration, login, and JWT token management (localhost:5001)
+
+- CloudFileStorage.Common/  
+  Contains shared constants, helpers, and DTOs
+
+- CloudFileStorage.FileMetadataApi/  
+  Manages file metadata and sharing settings (localhost:5002)
+
+- CloudFileStorage.FileStorageApi/  
+  Handles physical file upload/download operations (localhost:5003)
+
+- CloudFileStorage.GatewayApi/  
+  Acts as API Gateway and routes requests to other services (localhost:5000)
+
+- CloudFileStorage.UI/  
+  ASP.NET Core MVC frontend project for user interaction (localhost:5500)
 
 ## Getting Started
 
